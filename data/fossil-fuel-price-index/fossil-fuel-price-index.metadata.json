@@ -1,0 +1,65 @@
+{
+  "chart": {
+    "title": "Fossil fuel price index",
+    "subtitle": "Average global prices of oil, natural gas and coal, measured as an energy index where prices in 2019=100.",
+    "citation": "Energy Institute based on S&P Global Platts - Statistical Review of World Energy (2025)",
+    "originalChartUrl": "https://ourworldindata.org/grapher/fossil-fuel-price-index?v=1&csvType=full&useColumnShortNames=false",
+    "selection": [
+      "Brent",
+      "Northwest Europe",
+      "UK NBP"
+    ]
+  },
+  "columns": {
+    "Coal price index": {
+      "titleShort": "Coal price index",
+      "titleLong": "Coal price index",
+      "descriptionShort": "Average price measured as an energy index where prices in 2019 = 100.",
+      "shortUnit": "",
+      "unit": "",
+      "timespan": "1987-2024",
+      "type": "Numeric",
+      "owidVariableId": 1077673,
+      "shortName": "coal_price_index",
+      "lastUpdated": "2025-06-27",
+      "nextUpdate": "2026-06-27",
+      "citationShort": "Energy Institute based on S&P Global Platts - Statistical Review of World Energy (2025) – with major processing by Our World in Data",
+      "citationLong": "Energy Institute based on S&P Global Platts - Statistical Review of World Energy (2025) – with major processing by Our World in Data. “Coal price index” [dataset]. Energy Institute, “Statistical Review of World Energy” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1077673.metadata.json"
+    },
+    "Oil spot crude price index": {
+      "titleShort": "Oil spot crude price index",
+      "titleLong": "Oil spot crude price index",
+      "descriptionShort": "Average price measured as an energy index where prices in 2019 = 100.",
+      "shortUnit": "",
+      "unit": "",
+      "timespan": "1973-2024",
+      "type": "Numeric",
+      "owidVariableId": 1077690,
+      "shortName": "oil_spot_crude_price_index",
+      "lastUpdated": "2025-06-27",
+      "nextUpdate": "2026-06-27",
+      "citationShort": "Energy Institute based on S&P Global Platts - Statistical Review of World Energy (2025) – with major processing by Our World in Data",
+      "citationLong": "Energy Institute based on S&P Global Platts - Statistical Review of World Energy (2025) – with major processing by Our World in Data. “Oil spot crude price index” [dataset]. Energy Institute, “Statistical Review of World Energy” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1077690.metadata.json"
+    },
+    "Gas price index": {
+      "titleShort": "Gas price index",
+      "titleLong": "Gas price index",
+      "descriptionShort": "Average price measured as an energy index where prices in 2019 = 100.",
+      "shortUnit": "",
+      "unit": "",
+      "timespan": "1989-2024",
+      "type": "Numeric",
+      "owidVariableId": 1077677,
+      "shortName": "gas_price_index",
+      "lastUpdated": "2025-06-27",
+      "nextUpdate": "2026-06-27",
+      "citationShort": "Energy Institute based on S&P Global Platts - Statistical Review of World Energy (2025) – with major processing by Our World in Data",
+      "citationLong": "Energy Institute based on S&P Global Platts - Statistical Review of World Energy (2025) – with major processing by Our World in Data. “Gas price index” [dataset]. Energy Institute, “Statistical Review of World Energy” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1077677.metadata.json"
+    }
+  },
+  "dateDownloaded": "2025-10-29",
+  "activeFilters": {}
+}
