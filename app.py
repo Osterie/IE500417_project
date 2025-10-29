@@ -2,7 +2,15 @@ from dash import Dash, html, dcc, callback, Output, Input
 import plotly.express as px
 import pandas as pd
 
-df = pd.read_csv('https://raw.githubusercontent.com/plotly/datasets/master/gapminder_unfiltered.csv')
+co2 = pd.read_csv('data/owid-co2-data.csv')
+fuel_consumption_by_fuel_type = pd.read_csv('data/fossil-fuel-consumption-by-fuel-type/fossil-fuel-consumption-by-fuel-type.csv')
+fuel_price_index = pd.read_csv('data/fossil-fuel-price-index/fossil-fuel-price-index.csv')
+fuel_production = pd.read_csv('data/fossil-fuel-production/fossil-fuel-production.csv')
+
+co2.info()
+fuel_consumption_by_fuel_type.info()
+fuel_price_index.info()
+fuel_production.info()
 
 app = Dash()
 
