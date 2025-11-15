@@ -48,6 +48,24 @@ app.layout = html.Div(
             children=[
                 dcc.Graph(id='graph-content')
             ]
+        ),
+
+        html.Div(
+            id='slider-container',
+            children=[
+                html.Label("Select year range:"),
+                dcc.RangeSlider(
+                    id='year-range-slider',
+                    min=processed_data['year'].min(),
+                    max=processed_data['year'].max(),
+                    value=[processed_data['year'].min(), processed_data['year'].max()],
+                    marks=None,
+                    step=1,
+                    tooltip={"placement": "bottom", "always_visible": True},
+                    allowCross=False
+                )
+            ],
+            style={"display": "none"}  # initially hidden
         )
     ]
 )
@@ -57,8 +75,9 @@ app.layout = html.Div(
     Input('dropdown-selection', 'value'),
     Input('dropdown-selection-x', 'value'),
     Input('dropdown-selection-y', 'value'),
+    Input('year-range-slider', 'value'),
 )
-def update_graph(country, x_attr, y_attr):
+def update_graph(country, x_attr, y_attr, year_range):
     if (country is None) or (x_attr is None) or (y_attr is None):
         raise PreventUpdate
 
@@ -70,6 +89,7 @@ def update_graph(country, x_attr, y_attr):
     dff = processed_data[processed_data.country.isin(countries)]
 
     if x_attr == "year":
+        dff = dff[(dff['year'] >= year_range[0]) & (dff['year'] <= year_range[1])]
         fig = px.line(dff, x=x_attr, y=y_attr, color="country")
     else:
         fig = px.scatter(dff, x=x_attr, y=y_attr, color="country")
@@ -83,6 +103,19 @@ def update_graph(country, x_attr, y_attr):
     )
     
     return fig
+
+
+
+@callback(
+    Output('slider-container', 'style'),
+    Input('dropdown-selection-x', 'value')
+)
+def toggle_slider(x_attr):
+    if x_attr == 'year':
+        return {"display": "block"}
+    else:
+        return {"display": "none"}
+
 
 
 
