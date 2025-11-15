@@ -19,7 +19,7 @@ app.layout = create_layout(processed_data)
 
 register_graph_callbacks(processed_data)
 register_correlation_callbacks(processed_data)
-register_slider_callbacks()
+register_slider_callbacks(processed_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
