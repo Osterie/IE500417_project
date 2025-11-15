@@ -44,7 +44,6 @@ def preprocess_data():
     return final_dataframe.sort_values(by=["country", "year"])
 
 def read_data(path, relevant_attributes = []):
-    print(path)    
     data = pd.read_csv(path)
     if (relevant_attributes != []):
         data = data[data.columns.intersection(relevant_attributes)]
