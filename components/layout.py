@@ -33,7 +33,28 @@ def create_layout(processed_data):
                             'co2',
                             id='dropdown-selection-y'
                         )
-                    ])
+                    ]),
+                    html.Div(id='rolling-average-container', children=[
+                        dcc.Checklist(
+                            id='show-rolling-average',
+                            options=[{'label': 'Show Rolling Average', 'value': 'show'}],
+                            value=[],
+                            inline=True,
+                            style={"marginTop": "10px"}
+                        ),
+                        html.Div([
+                            html.Label("Rolling Average Window (years):"),
+                            dcc.Input(
+                                id='rolling-window-size',
+                                type='number',
+                                min=1,
+                                max=20,
+                                step=1,
+                                value=3,  # default 3-year rolling average
+                                style={"width": "60px", "marginLeft": "10px"}
+                            )
+                        ], style={"marginTop": "5px"})
+                    ]),
                 ]
             ),
 

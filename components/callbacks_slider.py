@@ -37,6 +37,8 @@ def register_slider_callbacks(processed_data):
             year_mins.append(year_min)
             year_maxs.append(year_max)
 
+        if not year_mins or not year_maxs:
+            raise PreventUpdate
         overall_min = min(year_mins)
         overall_max = max(year_maxs)
 
