@@ -13,22 +13,44 @@ except FileNotFoundError:
 
 app = Dash()
 
-app.layout = html.Div([
-    html.H1(children='Data Visualization', style={'textAlign':'center'}),
-    html.Div([
-        "Select a country/region:",
-    dcc.Dropdown(processed_data.country.unique(), 'Canada', id='dropdown-selection', multi=True),
-    ]),
-    html.Div([
-        "x-axis attribute:",
-        dcc.Dropdown(processed_data.columns.values, 'year', id='dropdown-selection-x',  placeholder="Select an X-axis attribute"),
-    ]),
-    html.Div([
-        "y-axis attribute:",
-        dcc.Dropdown(processed_data.columns.values, 'co2', id='dropdown-selection-y',  placeholder="Select a Y-axis attribute"),
-    ]),
-    dcc.Graph(id='graph-content')
-])
+app.layout = html.Div(
+    id="main-container",
+    children=[
+        html.H1("Data Visualization", style={"textAlign":"center"}),
+
+        html.Div(
+            className="control-grid",
+            children=[
+                html.Div([
+                    html.Label("Select a country/region:"),
+                    dcc.Dropdown(processed_data.country.unique(),
+                                 'Canada',
+                                 id='dropdown-selection',
+                                 multi=True)
+                ]),
+                html.Div([
+                    html.Label("X-axis attribute:"),
+                    dcc.Dropdown(processed_data.columns.values,
+                                 'year',
+                                 id='dropdown-selection-x')
+                ]),
+                html.Div([
+                    html.Label("Y-axis attribute:"),
+                    dcc.Dropdown(processed_data.columns.values,
+                                 'co2',
+                                 id='dropdown-selection-y')
+                ])
+            ]
+        ),
+
+        html.Div(
+            className="graph-card",
+            children=[
+                dcc.Graph(id='graph-content')
+            ]
+        )
+    ]
+)
 
 @callback(
     Output('graph-content', 'figure'),
