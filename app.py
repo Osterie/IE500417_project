@@ -33,10 +33,8 @@ app.layout = html.Div([
 def update_graph(country, x_attr, y_attr):
     if (country is None) or (x_attr is None) or (y_attr is None):
         raise PreventUpdate
-    print(country, x_attr, y_attr)
-    dff = processed_data[processed_data.country==country]
+    dff = processed_data[processed_data.country.isin([country] if isinstance(country, str) else country)]
     
-
     if x_attr == 'year':
         fig = px.line(dff, x=x_attr, y=y_attr, color='country')
     else:
