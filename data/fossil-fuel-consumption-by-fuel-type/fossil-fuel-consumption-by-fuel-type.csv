@@ -1,4 +1,4 @@
-Entity,Code,Year,Gas consumption - TWh,Coal consumption - TWh,Oil consumption - TWh
+country,code,year,gas consumption - TWh,coal consumption - TWh,oil consumption - TWh
 Africa,,1965,9.57193,323.49615,341.07257
 Africa,,1966,10.6980915,323.12222,369.46457
 Africa,,1967,10.573844,330.2916,368.28156

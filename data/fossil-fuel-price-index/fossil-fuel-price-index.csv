@@ -1,4 +1,4 @@
-Entity,Code,Year,Coal price index,Oil spot crude price index,Gas price index
+country,code,year,coal price index,oil spot crude price index,Gas price index
 Australia,AUS,2018,131.13506,,
 Australia,AUS,2019,100,,
 Australia,AUS,2020,82.49764,,

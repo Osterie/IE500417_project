@@ -1,4 +1,4 @@
-Entity,Code,Year,Coal production - TWh,Oil production - TWh,Gas production - TWh
+country,code,year,coal production - TWh,oil production - TWh,gas production - TWh
 Africa,,1981,909.9034,2773.1401,264.74805
 Africa,,1982,998.71216,2666.0615,325.1129
 Africa,,1983,1011.8728,2702.3513,436.95685
