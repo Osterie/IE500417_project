@@ -82,7 +82,7 @@ def preprocess_data():
         # final_dataframe = pd.merge(final_dataframe, dataframe)
         final_dataframe = pd.merge(final_dataframe, dataframe, how='outer', on=attributes_we_care_about)
         
-    return pd.final_dataframe.sort_values(by="country")
+    return final_dataframe.sort_values(by=["country", "year"])
 
 
 
@@ -139,6 +139,8 @@ def preprocess_data():
 
 print("starting")
 processed_data = preprocess_data()
+
+processed_data.to_csv('data/processed_data.csv', index=False)
 print("done")
 
 # co2.info()
