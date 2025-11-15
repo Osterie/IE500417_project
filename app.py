@@ -53,7 +53,13 @@ def update_graph(country, x_attr, y_attr):
         fig = px.scatter(dff, x=x_attr, y=y_attr, color="country")
 
 
-
+    fig.update_layout(
+        template="plotly_white",
+        title=f"{y_attr} vs {x_attr}",
+        title_x=0.5,
+        margin=dict(l=20, r=20, t=50, b=20)
+    )
+    
     return fig
 
 
