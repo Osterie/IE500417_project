@@ -17,10 +17,19 @@ app = Dash()
 
 # Requires Dash 2.17.0 or later
 app.layout = html.Div([
-    html.H1(children='Title of Dash App', style={'textAlign':'center'}),
+    html.H1(children='Data Visualization', style={'textAlign':'center'}),
+    html.Div([
+        "Select a country/region:",
     dcc.Dropdown(processed_data.country.unique(), 'Canada', id='dropdown-selection', multi=True),
-    dcc.Dropdown(processed_data.columns.values, 'year', id='dropdown-selection-x'),
-    dcc.Dropdown(processed_data.columns.values, 'co2', id='dropdown-selection-y'),
+    ]),
+    html.Div([
+        "x-axis attribute:",
+        dcc.Dropdown(processed_data.columns.values, 'year', id='dropdown-selection-x',  placeholder="Select an X-axis attribute"),
+    ]),
+    html.Div([
+        "y-axis attribute:",
+        dcc.Dropdown(processed_data.columns.values, 'co2', id='dropdown-selection-y',  placeholder="Select a Y-axis attribute"),
+    ]),
     dcc.Graph(id='graph-content')
 ])
 
