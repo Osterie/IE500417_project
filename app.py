@@ -11,11 +11,8 @@ except FileNotFoundError:
     processed_data = preprocess_data()
     processed_data.to_csv('data/processed_data.csv', index=False)
 
-processed_data.info()
-
 app = Dash()
 
-# Requires Dash 2.17.0 or later
 app.layout = html.Div([
     html.H1(children='Data Visualization', style={'textAlign':'center'}),
     html.Div([
@@ -42,12 +39,20 @@ app.layout = html.Div([
 def update_graph(country, x_attr, y_attr):
     if (country is None) or (x_attr is None) or (y_attr is None):
         raise PreventUpdate
-    dff = processed_data[processed_data.country.isin([country] if isinstance(country, str) else country)]
-    
-    if x_attr == 'year':
-        fig = px.line(dff, x=x_attr, y=y_attr, color='country')
+
+    if isinstance(country, str):
+        countries = [country]
     else:
-        fig = px.scatter(dff, x=x_attr, y=y_attr, color='country')
+        countries = country
+
+    dff = processed_data[processed_data.country.isin(countries)]
+
+    if x_attr == "year":
+        fig = px.line(dff, x=x_attr, y=y_attr, color="country")
+    else:
+        fig = px.scatter(dff, x=x_attr, y=y_attr, color="country")
+
+
 
     return fig
 
