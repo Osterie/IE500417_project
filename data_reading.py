@@ -1,62 +1,15 @@
 import pandas as pd
 
-attributes_we_care_about = [
-    "year",
-    "country",
-    "oil production - TWh",
-    "gas production - TWh",
-    "oil consumption - TWh",
-    "gas consumption - TWh",
-    "co2",
-    "gas_co2",
-    "oil_co2",
-    "population",
-    "gdp",
-    "co2_growth_abs",
-    "co2_growth_prct",
-    "co2_per_unit_energy",
-    "total_ghg",
-    "cumulative_oil_co2",
-    "methane",
-]
-
-# co2 = pd.read_csv('data/owid-co2-data.csv')
-# fuel_consumption_by_fuel_type = pd.read_csv('data/fossil-fuel-consumption-by-fuel-type/fossil-fuel-consumption-by-fuel-type.csv')
-# fuel_production = pd.read_csv('data/fossil-fuel-production/fossil-fuel-production.csv')
-# fuel_price_index = pd.read_csv('data/fossil-fuel-price-index/fossil-fuel-price-index.csv')
-
-# co2 = co2[co2.columns.intersection(attributes_we_care_about)]
-# fuel_consumption_by_fuel_type= fuel_consumption_by_fuel_type[fuel_consumption_by_fuel_type.columns.intersection(attributes_we_care_about)]
-# fuel_production= fuel_production[fuel_production.columns.intersection(attributes_we_care_about)]
-# fuel_price_index= fuel_price_index[fuel_price_index.columns.intersection(attributes_we_care_about)]
-
+from file_paths import FilePaths
 
 def preprocess_data():
     
-    attributes_we_care_about = [
-    "year",
-    "country",
-    "oil production - TWh",
-    "gas production - TWh",
-    "oil consumption - TWh",
-    "gas consumption - TWh",
-    "co2",
-    "gas_co2",
-    "oil_co2",
-    "population",
-    "gdp",
-    "co2_growth_abs",
-    "co2_growth_prct",
-    "co2_per_unit_energy",
-    "total_ghg",
-    "cumulative_oil_co2",
-    "methane",
-]
+    attributes_we_care_about = get_attributes_we_care_about()
     
-    co2 = read_data('data/owid-co2-data.csv', attributes_we_care_about)
-    fuel_consumption_by_fuel_type = read_data('data/fossil-fuel-consumption-by-fuel-type/fossil-fuel-consumption-by-fuel-type.csv', attributes_we_care_about)
-    fuel_production = read_data('data/fossil-fuel-production/fossil-fuel-production.csv', attributes_we_care_about)
-    fuel_price_index = read_data('data/fossil-fuel-price-index/fossil-fuel-price-index.csv', attributes_we_care_about)
+    co2 = read_data(FilePaths.CO2.value, attributes_we_care_about)
+    fuel_consumption_by_fuel_type = read_data(FilePaths.FUEL_CONSUMPTION_BY_FUEL_TYPE.value, attributes_we_care_about)
+    fuel_production = read_data(FilePaths.FUEL_PRODUCTION.value, attributes_we_care_about)
+    fuel_price_index = read_data(FilePaths.FUEL_PRICE_INDEX.value, attributes_we_care_about)
 
     # Only use countries common in all datasets.
     common_countries = set(co2['country']).intersection(
@@ -68,14 +21,12 @@ def preprocess_data():
 
     
     for country in list(common_countries):
-        co2_years_for_country = set(co2[co2['country'] == country]['year'])
-        fuel_consumption_by_fuel_type_years_for_country = set(fuel_consumption_by_fuel_type[fuel_consumption_by_fuel_type['country'] == country]['year'])
-        fuel_production_years_for_country = set(fuel_production[fuel_production['country'] == country]['year'])
-
-        common_years = co2_years_for_country.intersection(
-            fuel_consumption_by_fuel_type_years_for_country,
-            fuel_production_years_for_country
+        
+        common_years = get_common_years_between_dataframes_for_country(
+            [co2, fuel_consumption_by_fuel_type, fuel_production],
+            country
         )
+        
 
         co2_data = co2[(co2['country'] == country) & (co2['year'].isin(common_years))]
         consumption = fuel_consumption_by_fuel_type[
@@ -95,12 +46,6 @@ def preprocess_data():
             .merge(production, on=['country', 'year'], how='inner')
         )
 
-        
-        # print(dataframe)
-        # print(dataframe.columns)
-        # print('oil production - TWh' in dataframe.columns)
-        
-        # final_dataframe = pd.merge(final_dataframe, dataframe)
         final_dataframe = pd.merge(final_dataframe, dataframe, how='outer', on=attributes_we_care_about)
         
     return final_dataframe.sort_values(by=["country", "year"])
@@ -157,10 +102,8 @@ def preprocess_data():
     # temperature_change_from_co2
     # temperature_change_from_ghg
 
-
-
 def read_data(path, relevant_attributes = []):
-    
+    print(path)    
     data = pd.read_csv(path)
     if (relevant_attributes != []):
         data = data[data.columns.intersection(relevant_attributes)]
@@ -168,13 +111,39 @@ def read_data(path, relevant_attributes = []):
     return data
 
 
+def get_attributes_we_care_about():
+    return [
+    "year",
+    "country",
+    "oil production - TWh",
+    "gas production - TWh",
+    "oil consumption - TWh",
+    "gas consumption - TWh",
+    "co2",
+    "gas_co2",
+    "oil_co2",
+    "population",
+    "gdp",
+    "co2_growth_abs",
+    "co2_growth_prct",
+    "co2_per_unit_energy",
+    "total_ghg",
+    "cumulative_oil_co2",
+    "methane",
+]
 
-# co2 = pd.read_csv('data/owid-co2-data.csv')
-# fuel_consumption_by_fuel_type = pd.read_csv('data/fossil-fuel-consumption-by-fuel-type/fossil-fuel-consumption-by-fuel-type.csv')
-# fuel_production = pd.read_csv('data/fossil-fuel-production/fossil-fuel-production.csv')
-# fuel_price_index = pd.read_csv('data/fossil-fuel-price-index/fossil-fuel-price-index.csv')
 
-# co2 = co2[co2.columns.intersection(attributes_we_care_about)]
-# fuel_consumption_by_fuel_type= fuel_consumption_by_fuel_type[fuel_consumption_by_fuel_type.columns.intersection(attributes_we_care_about)]
-# fuel_production= fuel_production[fuel_production.columns.intersection(attributes_we_care_about)]
-# fuel_price_index= fuel_price_index[fuel_price_index.columns.intersection(attributes_we_care_about)]
+def get_common_years_between_dataframes_for_country(dataframes, country):
+    
+    all_years = []
+    
+    for dataframe in dataframes:
+        if 'year' not in dataframe:
+            raise ValueError("Dataframe does not contain 'year' column")
+        if 'country' not in dataframe:
+            raise ValueError("Dataframe does not contain 'country' column")
+        years = set(dataframe[dataframe['country'] == country]['year'])
+        all_years.append(years)
+
+    common_years = set.intersection(*all_years)
+    return common_years
