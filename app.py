@@ -35,7 +35,14 @@ def update_graph(country, x_attr, y_attr):
         raise PreventUpdate
     print(country, x_attr, y_attr)
     dff = processed_data[processed_data.country==country]
-    return px.line(dff, x=x_attr, y=y_attr)
+    
+
+    if x_attr == 'year':
+        fig = px.line(dff, x=x_attr, y=y_attr, color='country')
+    else:
+        fig = px.scatter(dff, x=x_attr, y=y_attr, color='country')
+
+    return fig
 
 
 
