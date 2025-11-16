@@ -50,10 +50,32 @@ def create_layout(processed_data):
                                 min=1,
                                 max=20,
                                 step=1,
-                                value=3,  # default 3-year rolling average
+                                value=3,
                                 style={"width": "60px", "marginLeft": "10px"}
                             )
                         ], style={"marginTop": "5px"})
+                    ]),
+
+                    html.Div(id='prediction-container', children=[
+                        dcc.Checklist(
+                            id='enable-prediction',
+                            options=[{'label': 'Enable Prediction', 'value': 'predict'}],
+                            value=[],
+                            inline=True,
+                            style={"marginTop": "15px"}
+                        ),
+                        html.Div([
+                            html.Label("Regression Model:"),
+                            dcc.Dropdown(
+                                options=[
+                                    {"label": "Linear Regression", "value": "linear"},
+                                    {"label": "Quadratic Regression", "value": "quadratic"},
+                                    {"label": "Cubic Regression", "value": "cubic"},
+                                ],
+                                value="linear",
+                                id="model-selection"
+                            ),
+                        ], id='model-selection-container', style={"display": "none"})
                     ]),
                 ]
             ),

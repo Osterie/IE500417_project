@@ -5,7 +5,8 @@ from components.layout import create_layout
 from components.callbacks_graph import register_graph_callbacks
 from components.callbacks_correlation import register_correlation_callbacks
 from components.callbacks_slider import register_slider_callbacks
-
+from components.prediction.prediction_ui_callbacks import register_prediction_ui_callbacks
+from components.prediction.callbacks_prediction import register_prediction_callbacks
 
 processed_data = pd.DataFrame()
 try:
@@ -20,6 +21,8 @@ app.layout = create_layout(processed_data)
 register_graph_callbacks(processed_data)
 register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
+register_prediction_callbacks(processed_data)
+register_prediction_ui_callbacks(processed_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
