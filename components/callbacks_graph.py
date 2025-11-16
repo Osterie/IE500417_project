@@ -1,6 +1,7 @@
 from dash import Input, Output, callback
 from dash.exceptions import PreventUpdate
 import plotly.express as px
+from components.prediction.callbacks_prediction import add_prediction
 
 def register_graph_callbacks(processed_data):
 
@@ -11,9 +12,11 @@ def register_graph_callbacks(processed_data):
         Input('dropdown-selection-y', 'value'),
         Input('year-range-slider', 'value'),
         Input('show-rolling-average', 'value'),
-        Input('rolling-window-size', 'value')
+        Input('rolling-window-size', 'value'),
+        Input('enable-prediction', 'value'),
+        Input('model-selection', 'value'),
     )
-    def update_graph(country, x_attr, y_attr, year_range, show_rolling, rolling_window):
+    def update_graph(country, x_attr, y_attr, year_range, show_rolling, rolling_window, prediction_mode, model_type):
         if (country is None) or (x_attr is None) or (y_attr is None):
             raise PreventUpdate
 
@@ -39,6 +42,9 @@ def register_graph_callbacks(processed_data):
                         name=f'{country_name} - {rolling_window}-yr Rolling Avg',
                         line=dict(dash='dash')
                     )
+            if prediction_mode and "predict" in prediction_mode:
+                fig = add_prediction(fig, processed_data, countries, x_attr, y_attr, year_range, model_type)
+
         else:
             fig = px.scatter(dff, x=x_attr, y=y_attr, color="country")
 
