@@ -1,4 +1,5 @@
 from dash import html, dcc
+from map import create_ghg_layout
 
 def create_layout(processed_data):
     return html.Div(
@@ -65,6 +66,8 @@ def create_layout(processed_data):
                 ]
             ),
 
+        
+
             html.Div(
                 id='slider-container',
                 children=[
@@ -86,6 +89,8 @@ def create_layout(processed_data):
                 style={"display": "none"}
             ),
 
+        
+
             html.Button(
                 "Show Correlation",
                 id="correlation-button",
@@ -96,6 +101,13 @@ def create_layout(processed_data):
             html.Div(
                 id="correlation-output",
                 style={"fontSize": "18px", "textAlign": "center", "marginTop": "10px"}
+            ),
+
+            html.Hr(),
+            html.Div(
+                create_ghg_layout(),
+                style={"marginTop": "40px"}
             )
         ]
+        
     )
