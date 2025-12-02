@@ -1,11 +1,7 @@
-<<<<<<< HEAD
-from dash import html, dcc
-from map import create_ghg_layout
-from components.stacked_chart import create_stacked_chart_layout
-=======
+
 import dash
 from dash import html
->>>>>>> 6bb9a9990f8c121720088a6293dcacae2fb574d4
+
 
 def create_layout():
     return html.Div(
