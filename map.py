@@ -23,7 +23,7 @@ def create_ghg_layout():
 
 
     layout = html.Div([
-        html.H1(children='Gloabal Greenhouse Gas Emissions over time', style={'textAlign':'center'}),
+        html.H1(children='Global Greenhouse Gas Emissions over time', style={'textAlign':'center'}),
 
          dcc.Graph(id='ghg-map'),
     
