@@ -1,4 +1,5 @@
-from data_reading import preprocess_data
+from data_store import processed_data
+
 import pandas as pd
 from dash import Dash, html, dcc, callback, Output, Input
 import plotly.express as px
@@ -7,7 +8,7 @@ def create_ghg_layout():
 
 
     # Get preprocessed data
-    data = preprocess_data()
+    data = processed_data
 
  
     # We use just the columns that we need for the map. 
