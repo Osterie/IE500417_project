@@ -1,7 +1,16 @@
-country,oil production - TWh (total)
-Russia,213557.019
-Norway,51273.3379573
-United Kingdom,46829.2876901
-Romania,5790.949201
-Denmark,4495.3335905
-Italy,2579.846688
+country,oil production - TWh (total),gas production - TWh (total)
+Russia,213557.019,225511.632
+Norway,51273.3379573,29426.543922
+United Kingdom,46829.2876901,29402.143195
+Romania,5790.949201,10288.709399
+Denmark,4495.3335905,2230.3844905
+Italy,2579.846688,6520.456769
+Greece,0.0,0.0
+Hungary,0.0,0.0
+Germany,0.0,7779.525501
+Bulgaria,0.0,0.0
+Poland,0.0,2391.204272
+Netherlands,0.0,32960.00025
+Ukraine,0.0,8129.86458
+Turkey,0.0,0.0
+Spain,0.0,0.0

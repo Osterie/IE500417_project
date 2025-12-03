@@ -1,6 +1,6 @@
 import pandas as pd
 from data_reading import create_oil_production_dataset_countries, preprocess_data
-from data_reading import create_oil_production_dataset
+from data_reading import create_oil_gas_production_dataset
 
 
 try:
@@ -12,7 +12,7 @@ except FileNotFoundError:
 try:
     oil_production_data = pd.read_csv('data/total_oil_production.csv')
 except FileNotFoundError:
-    oil_production_data = create_oil_production_dataset(processed_data)
+    oil_production_data = create_oil_gas_production_dataset(processed_data)
     oil_production_data.to_csv('data/total_oil_production.csv', index=False)
 
 
