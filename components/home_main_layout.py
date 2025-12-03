@@ -64,18 +64,43 @@ def create_main_layout(processed_data):
                             inline=True,
                             style={"marginTop": "15px"}
                         ),
-                        html.Div([
-                            html.Label("Regression Model:"),
-                            dcc.Dropdown(
-                                options=[
-                                    {"label": "Linear Regression", "value": "linear"},
-                                    {"label": "Quadratic Regression", "value": "quadratic"},
-                                    {"label": "Cubic Regression", "value": "cubic"},
-                                ],
-                                value="linear",
-                                id="model-selection"
-                            ),
-                        ], id='model-selection-container', style={"display": "none"})
+
+                        html.Div(
+                            id='model-selection-container',
+                            children=[
+                                html.Label("Regression Model:"),
+                                dcc.Dropdown(
+                                    options=[
+                                        {"label": "Polynomial Regression", "value": "polynomial"},
+                                        {"label": "Exponential", "value": "exponential"},
+                                        {"label": "Logarithmic", "value": "logarithmic"},
+                                        {"label": "Random Forest", "value": "random_forest"},
+                                        {"label": "LOWESS Smoother", "value": "lowess"},
+                                    ],
+                                    value="polynomial",
+                                    multi=True,
+                                    id="model-selection"
+                                ),
+                            ],
+                            style={"display": "none"}
+                        ),
+
+                        html.Div(
+                            id="polynomial-degree-container",
+                            children=[
+                                html.Label("Polynomial Degree:"),
+                                dcc.Slider(
+                                    id="polynomial-degree",
+                                    min=1,
+                                    max=8,
+                                    step=1,
+                                    value=2,
+                                    marks={i: str(i) for i in range(1, 9)},
+                                    tooltip={"placement": "bottom", "always_visible": False},
+                                )
+                            ],
+                            style={"display": "none", "marginTop": "10px"}
+                        ),
                     ]),
                 ]
             ),
