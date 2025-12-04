@@ -143,12 +143,6 @@ def create_main_layout(processed_data):
             html.Div(
                 id="correlation-output",
                 style={"fontSize": "18px", "textAlign": "center", "marginTop": "10px"}
-            ),
-            
-            html.Hr(),
-            html.Div(
-                create_ghg_layout(),
-                style={"marginTop": "40px"}
             )
         ]
     )
