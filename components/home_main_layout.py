@@ -13,7 +13,7 @@ def create_main_layout(processed_data):
                     create_x_axis_selection(processed_data, 'dropdown-selection-x', default_x='year'),
                     create_y_axis_selection(processed_data, 'dropdown-selection-y', default_y='co2'),
                     create_rolling_average_selection('show-rolling-average', 'rolling-window-size'),
-                    create_prediction_controls('enable-prediction', 'model-selection', 'polynomial-degree')
+                    create_prediction_controls('model-selection-container', 'enable-prediction', 'model-selection', 'polynomial-degree')
                 ]
             ),
 
@@ -91,7 +91,7 @@ def create_y_axis_selection(processed_data, y_axis_id, default_y=''):
         default_y = processed_data.columns.values[0]
     
     return html.Div([
-        html.Label("X-axis attribute:"),
+        html.Label("Y-axis attribute:"),
         dcc.Dropdown(
             processed_data.columns.values,
             default_y,
