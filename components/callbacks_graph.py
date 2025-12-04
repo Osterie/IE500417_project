@@ -2,6 +2,14 @@ from dash import Input, Output, callback
 from dash.exceptions import PreventUpdate
 import plotly.express as px
 from components.prediction.callbacks_prediction import add_prediction
+from util import (
+    create_line_chart,
+    create_scatter_chart,
+    get_data_for_countries,
+    get_data_in_year_range,
+    do_rolling_average,
+    do_prediction,
+)
 
 def register_graph_callbacks(processed_data):
 
@@ -17,65 +25,32 @@ def register_graph_callbacks(processed_data):
         Input('model-selection', 'value'),
         Input('polynomial-degree', 'value'),
     )
-    def update_graph(country, x_attr, y_attr, year_range, show_rolling, rolling_window, prediction_mode, model_selection, poly_degree):
-        if (country is None) or (x_attr is None) or (y_attr is None):
+    def update_graph(countries, x_attr, y_attr, year_range, show_rolling, rolling_window, prediction_mode, model_selection, poly_degree):
+        if (countries is None) or (x_attr is None) or (y_attr is None):
             raise PreventUpdate
 
-        if isinstance(country, str):
-            countries = [country]
-        else:
-            countries = country
-
-        dff = processed_data[processed_data.country.isin(countries)]
+        dff = get_data_for_countries(processed_data, countries)
 
         if x_attr == "year":
-            dff = dff[(dff['year'] >= year_range[0]) & (dff['year'] <= year_range[1])]
-            fig = px.line(dff, x=x_attr, y=y_attr, color="country")
+            dff = get_data_in_year_range(dff, year_range)
+            fig = create_line_chart(dff, x_attr, y_attr)
 
-            if 'show' in (show_rolling or []):
-                for country_name in countries:
-                    country_data = dff[dff['country'] == country_name].sort_values('year')
-                    rolling = country_data[y_attr].rolling(
-                        window=rolling_window,
-                        min_periods=1
-                    ).mean()
+            fig = do_rolling_average(show_rolling, rolling_window, countries, dff, fig, y_attr)
 
-                    base_color = _get_country_color(fig, country_name)
-
-                    line_style = dict(dash='dash')
-                    if base_color is not None:
-                        line_style['color'] = base_color
-
-                    fig.add_scatter(
-                        x=country_data['year'],
-                        y=rolling,
-                        mode='lines',
-                        name=f'{country_name} - {rolling_window}-yr Rolling Avg',
-                        line=line_style,
-                    )
-
-            if prediction_mode and "predict" in (prediction_mode or []):
-                if not model_selection:
-                    selected_models = []
-                elif isinstance(model_selection, str):
-                    selected_models = [model_selection]
-                else:
-                    selected_models = model_selection
-
-                for model_type in selected_models:
-                    fig = add_prediction(
-                        fig,
-                        processed_data,
-                        countries,
-                        x_attr,
-                        y_attr,
-                        year_range,
-                        model_type, 
-                        poly_degree=poly_degree,
-                    )
+            fig = do_prediction(
+                prediction_mode,
+                model_selection,
+                processed_data,
+                countries,
+                x_attr,
+                y_attr,
+                year_range,
+                poly_degree,
+                fig
+            )
 
         else:
-            fig = px.scatter(dff, x=x_attr, y=y_attr, color="country")
+            fig = create_scatter_chart(dff, x_attr, y_attr)
 
         fig.update_layout(
             template="plotly_white",
@@ -96,11 +71,3 @@ def register_graph_callbacks(processed_data):
             return {"display": "block"}
         else:
             return {"display": "none"}
-
-def _get_country_color(fig, country_name):
-    for tr in fig.data:
-        if tr.name == country_name:
-            line = getattr(tr, "line", None)
-            if line and getattr(line, "color", None) is not None:
-                return line.color
-    return None
