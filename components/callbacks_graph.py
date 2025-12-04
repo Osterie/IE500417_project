@@ -29,6 +29,9 @@ def register_graph_callbacks(processed_data):
         if (countries is None) or (x_attr is None) or (y_attr is None):
             raise PreventUpdate
 
+        if isinstance(countries, str):
+            countries = [countries]
+            
         dff = get_data_for_countries(processed_data, countries)
 
         if x_attr == "year":
