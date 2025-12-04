@@ -12,32 +12,6 @@ from util import (
 )
 
 def register_war_story_callbacks(processed_data):
-
-    # @callback(
-    #     Output("war-graph-content", "figure"),
-    #     Input("war-selector", "value"),
-    #     State("war-graph-content", "figure"),
-    #     prevent_initial_call=True
-    # )
-    # def overlay_wars(selected_wars, base_figure):
-    #     if not selected_wars:
-    #         return base_figure
-
-    #     fig = go.Figure(base_figure)
-
-    #     for war_key in selected_wars:
-    #         war = wars[war_key]
-    #         fig.add_vrect(
-    #             x0=war["start"],
-    #             x1=war["end"],
-    #             fillcolor="red",
-    #             opacity=0.15,
-    #             line_width=0,
-    #             annotation_text=war["name"],
-    #             annotation_position="top left"
-    #         )
-
-    #     return fig
     
     @callback(
         Output('war-graph-content', 'figure'),
