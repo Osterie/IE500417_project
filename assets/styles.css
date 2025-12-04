@@ -1,12 +1,15 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f7f7f7;
+    margin: 0;
+    padding:0;
 }
 
 #main-container {
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 80%;
     padding: 20px;
+    grid-area: main-container;
+    background-color: #f7f7f7;
 }
 
 .graph-card {
@@ -27,4 +30,51 @@ label {
     font-weight: bold;
     margin-bottom: 5px;
     display: block;
+}
+
+
+#layout-container {
+  width: 100%;
+  display: grid;
+  grid-template-areas: "sidebar main-container";
+  grid-template-columns: 200px auto;
+}
+
+#sidebar {
+  grid-area: sidebar;
+  background-color: #2f3542;
+  color: white;
+}
+
+#sidebar h2 {
+    color: #f1f2f6;
+    margin-bottom: 25px;
+    font-size: 22px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.sidebar-link {
+    display: block;
+    text-decoration: none;
+    padding: 12px 15px;
+    width: 100%;
+    margin: 0px;
+    background-color: #57606f;
+    color: #f1f2f6;
+    font-size: 16px;
+    transition: 0.2s ease;
+}
+
+.sidebar-link:hover {
+    background-color: #747d8c;
+}
+
+.sidebar-link:active {
+    background-color: #ced6e0;
+    color: #2f3542;
 }

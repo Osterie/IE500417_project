@@ -41,7 +41,9 @@ def preprocess_data():
             on=attributes_we_care_about
         )
 
-    return final_dataframe.sort_values(by=["country", "year"])
+    final_dataframe = final_dataframe.sort_values(by=["country", "year"])
+            
+    return final_dataframe
 
 def read_data(path, relevant_attributes = []):
     data = pd.read_csv(path)
@@ -95,9 +97,26 @@ def merge_dataframes_by_common_country_and_years(dataframes, country, common_yea
 
     return final_dataframe
 
+def create_oil_gas_production_dataset(data):
+    total_oil_gas_production = aggregate_total_oil_gas_production(data)
+    total_oil_gas_production = total_oil_gas_production.sort_values(by='oil production - TWh (total)', ascending=False)
+    return total_oil_gas_production
 
+def aggregate_total_oil_gas_production(data):
+    total_oil_production = (
+        data.groupby('country')[['oil production - TWh', 'gas production - TWh']]
+            .sum()
+            .reset_index()
+            .rename(columns={'oil production - TWh': 'oil production - TWh (total)', 
+                             'gas production - TWh': 'gas production - TWh (total)'
+            })
+    )
+    return total_oil_production
 
-
+def create_oil_production_dataset_countries(total_oil_production, countries):
+    total_oil_production_countries = total_oil_production[total_oil_production['country'].isin(countries)]
+    total_oil_production_countries = total_oil_production_countries.sort_values(by='oil production - TWh (total)', ascending=False)
+    return total_oil_production_countries
 
 # Attribtues we care about:
 # year
