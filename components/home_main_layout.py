@@ -123,7 +123,7 @@ def create_rolling_average_selection(show_rolling_average_id, rolling_window_siz
         ], style={"marginTop": "5px"})
     ])
     
-def create_prediction_controls(enable_prediction_id, model_selection_id, polynomial_degree_id):
+def create_prediction_controls(model_selection_container, enable_prediction_id, model_selection_id, polynomial_degree_id):
     return html.Div(id='prediction-container', children=[
         dcc.Checklist(
             id=enable_prediction_id,
@@ -134,7 +134,7 @@ def create_prediction_controls(enable_prediction_id, model_selection_id, polynom
         ),
 
         html.Div(
-            id="model-selection-container",
+            id=model_selection_container,
             children=[
                 html.Label("Regression Model:"),
                 dcc.Dropdown(

@@ -6,10 +6,11 @@ from components.callbacks_graph import register_graph_callbacks
 from components.callbacks_correlation import register_correlation_callbacks
 from components.callbacks_slider import register_slider_callbacks
 from components.prediction.prediction_ui_callbacks import register_prediction_ui_callbacks
+from stories.war.war_story_callbacks import register_war_story_callbacks
 from data_store import processed_data
 
 
-app = Dash(__name__, use_pages=True)
+app = Dash(__name__, use_pages=True, suppress_callback_exceptions=True)
 server = app.server
 
 from components.layout import create_layout
@@ -20,6 +21,7 @@ register_graph_callbacks(processed_data)
 register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
 register_prediction_ui_callbacks(processed_data)
+register_war_story_callbacks(processed_data)
 
 app.processed_data = processed_data
 

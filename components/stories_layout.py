@@ -1,8 +1,5 @@
-from dash import html, dcc
-from dash import Input, Output, callback
-from components.home_main_layout import create_main_layout
-from data_store import processed_data
-
+from dash import html, dcc, Input, Output, callback
+from stories.war.war_story_layout import create_war_story_layout
 
 def create_stories_layout():
     return html.Div(
@@ -19,14 +16,10 @@ def create_stories_layout():
 )
 def update_output(selected_story):
     if selected_story == 'How does war affect the oil and gas industry?':
-        return create_war_story()
+        return create_war_story_layout()
     
     elif selected_story == 'DANIEL SIN STORY':
         return "hello"
     
     elif selected_story == 'BAKRI SIN STORY':
         return "hello"
-
-
-def create_war_story():
-    return create_main_layout(processed_data)
