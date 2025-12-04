@@ -153,3 +153,54 @@ def register_war_story_callbacks(processed_data):
                 min(current_range[1], new_max)
             ]
             return {"display": "none"}, new_max, new_range
+
+    @callback(
+        Output('war-selected-story-mode', 'children'),
+        Output('war-selected-story-description', 'children'),
+        Input("war-story-selector", "value")
+    )
+    def update_story_mode_label(selected_story_mode):
+        if selected_story_mode == "Self-Exploration":
+            story_mode_explanation = "You have chosen the story mode: Self-Exploration. Enjoy exploring the data on your own!"
+            story_mode_description = "For this exploration mode there is no predefined story. Feel free to select different countries, attributes, wars and time ranges to discover insights on your own."
+            return story_mode_explanation, story_mode_description
+        elif selected_story_mode == "Global Conflicts":
+            story_mode_explanation = "You have chosen the story mode: Global Conflicts. Explore the impact of global conflicts on the oil and gas industry."
+            story_mode_description = "As you can see on the graph, there is a notable dip in the worlds oil production for "
+            return story_mode_explanation, story_mode_description
+        elif selected_story_mode == "Iraq Wars":
+            story_mode_explanation = "You have chosen the story mode: Iraq Wars. Analyze the effects of the wars in Iraq on its oil and gas industry."
+            story_mode_description = "We can observe significant decreases in Iraq's oil production during the periods of the Iran-Iraq War and Gulf War, and alos a clear dip the year the Iraq War 2003 started. Interestingly we also see that the years leading up to the wars show a decline in production, possibly due to the increasing tensions and instability in the region."
+            return story_mode_explanation, story_mode_description
+        else:
+            return "Unknown Mode", ""
+        
+    @callback(
+        Output("war-dropdown-selection", "value", allow_duplicate=True),
+        Output("war-dropdown-selection-x", "value", allow_duplicate=True),
+        Output("war-dropdown-selection-y", "value", allow_duplicate=True),
+        Output("war-selector", "value", allow_duplicate=True),
+        Input("war-story-selector", "value"),
+        prevent_initial_call=True
+    )
+    def apply_story_mode_defaults(selected_story_mode):
+        if selected_story_mode == "Global Conflicts":
+            return (
+                ["World"],
+                "year",
+                "oil production - TWh",
+                [k for k, v in wars.items()],
+            )
+
+        elif selected_story_mode == "Iraq Wars":
+            return (
+                ["Iraq"],
+                "year",
+                "oil production - TWh",
+                ["iran_iraq", "gulf", "iraq"],
+            )
+
+        elif selected_story_mode == "Self-Exploration":
+            raise PreventUpdate
+
+        raise PreventUpdate
