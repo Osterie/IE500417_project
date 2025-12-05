@@ -6,26 +6,19 @@ import pandas as pd
 
 from stories.fn_goals.fn_goals import FN_GOALS
 from util import (
+    assign_new_color,
     create_line_chart,
-    create_line_chart_old,
     get_data_for_countries,
     get_data_in_year_range,
+    extract_existing_colors,
     do_rolling_average,
     do_prediction,
+    
 )
 
 
+
 def register_fn_story_callbacks(processed_data):
-
-    # colour map and helper
-
-    ALL_COUNTRIES = sorted(processed_data["country"].dropna().unique())
-    BASE_COLORS = px.colors.qualitative.Plotly
-
-    COUNTRY_COLOR_MAP = {
-        country: BASE_COLORS[i % len(BASE_COLORS)]
-        for i, country in enumerate(ALL_COUNTRIES)
-    }
 
     def apply_country_colors_and_sort(fig):
         fig = go.Figure(fig)
@@ -46,11 +39,6 @@ def register_fn_story_callbacks(processed_data):
             if not name:
                 continue
             country = name.split()[0]
-            if country in COUNTRY_COLOR_MAP:
-                color = COUNTRY_COLOR_MAP[country]
-                if tr.line is None:
-                    tr.line = {}
-                tr.line.color = color
 
         return fig
 
@@ -112,7 +100,7 @@ def register_fn_story_callbacks(processed_data):
 
         return fig
 
-    # ---------- MAIN FN GRAPH ----------
+    # Main Graph
 
     @callback(
         Output("fn-graph-content", "figure"),
@@ -124,6 +112,7 @@ def register_fn_story_callbacks(processed_data):
         Input("fn-enable-prediction", "value"),
         Input("fn-model-selection", "value"),
         Input("fn-polynomial-degree", "value"),
+        State("fn-graph-content", "figure")
     )
     def update_fn_graph(
         countries,
@@ -133,6 +122,7 @@ def register_fn_story_callbacks(processed_data):
         prediction_mode,
         model_selection,
         poly_degree,
+        existing_figure
     ):
         # Fixed axes for this story
         x_attr = "year"
@@ -152,7 +142,16 @@ def register_fn_story_callbacks(processed_data):
         if dff.empty:
             raise PreventUpdate
 
-        fig = create_line_chart_old(dff, x_attr, y_attr)
+        existing_color_map = extract_existing_colors(existing_figure) if existing_figure else {}
+        final_color_map = dict(existing_color_map)
+
+        for country in countries:
+            if country not in final_color_map:
+                final_color_map[country] = assign_new_color(final_color_map)
+
+
+        fig = create_line_chart(dff, x_attr, y_attr, color_map=final_color_map)
+
 
         fig = do_rolling_average(
             show_rolling,
@@ -191,7 +190,7 @@ def register_fn_story_callbacks(processed_data):
             ),
         )
 
-        fig = apply_country_colors_and_sort(fig)
+
         fig = enforce_nonnegative_y(fig)
 
         year_start, year_end = year_range
@@ -248,6 +247,7 @@ def register_fn_story_callbacks(processed_data):
         Input("fn-enable-prediction", "value"),
         Input("fn-model-selection", "value"),
         Input("fn-polynomial-degree", "value"),
+        State("fn-graph-content", "figure"),
     )
     def update_prod_cons_graphs(
         countries,
@@ -257,12 +257,20 @@ def register_fn_story_callbacks(processed_data):
         prediction_mode,
         model_selection,
         poly_degree,
+        graph_content
     ):
         if countries is None or year_range is None:
             raise PreventUpdate
 
         if isinstance(countries, str):
             countries = [countries]
+
+        existing_color_map = extract_existing_colors(graph_content) if graph_content else {}
+        final_color_map = dict(existing_color_map)
+
+        for country in countries:
+            if country not in final_color_map:
+                final_color_map[country] = assign_new_color(final_color_map)
 
         year_start, year_end = year_range
 
@@ -282,6 +290,8 @@ def register_fn_story_callbacks(processed_data):
         for country in countries:
             df_c = dff[dff["country"] == country].sort_values("year")
 
+            color = final_color_map.get(country)
+
             df_oil = df_c.dropna(subset=[oil_prod_col])
             if not df_oil.empty:
                 prod_fig.add_trace(
@@ -291,6 +301,7 @@ def register_fn_story_callbacks(processed_data):
                         mode="lines",
                         name=f"{country} oil production",
                         legendgroup=country,
+                        line=dict(color=color) if color else None,
                     )
                 )
 
@@ -303,7 +314,7 @@ def register_fn_story_callbacks(processed_data):
                         mode="lines",
                         name=f"{country} gas production",
                         legendgroup=country,
-                        line=dict(dash="dash"),
+                        line=dict(dash="dash", color=color) if color else dict(dash="dash"),
                     )
                 )
 
@@ -357,7 +368,7 @@ def register_fn_story_callbacks(processed_data):
                 yanchor="top",
             ),
         )
-        prod_fig = apply_country_colors_and_sort(prod_fig)
+
         prod_fig = enforce_nonnegative_y(prod_fig)
 
         # Consumption 
@@ -365,6 +376,8 @@ def register_fn_story_callbacks(processed_data):
 
         for country in countries:
             df_c = dff[dff["country"] == country].sort_values("year")
+
+            color = final_color_map.get(country)
 
             df_oil = df_c.dropna(subset=[oil_cons_col])
             if not df_oil.empty:
@@ -375,6 +388,7 @@ def register_fn_story_callbacks(processed_data):
                         mode="lines",
                         name=f"{country} oil consumption",
                         legendgroup=country,
+                        line=dict(color=color)
                     )
                 )
 
@@ -387,7 +401,7 @@ def register_fn_story_callbacks(processed_data):
                         mode="lines",
                         name=f"{country} gas consumption",
                         legendgroup=country,
-                        line=dict(dash="dash"),
+                        line=dict(dash="dash", color=color) if color else dict(dash="dash"),
                     )
                 )
 
@@ -441,7 +455,7 @@ def register_fn_story_callbacks(processed_data):
                 yanchor="top",
             ),
         )
-        cons_fig = apply_country_colors_and_sort(cons_fig)
+
         cons_fig = enforce_nonnegative_y(cons_fig)
 
         return prod_fig, cons_fig
