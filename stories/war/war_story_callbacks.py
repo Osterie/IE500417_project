@@ -154,7 +154,9 @@ def register_war_story_callbacks(processed_data):
             return story_mode_explanation, story_mode_description
         elif selected_story_mode == "Iraq Wars":
             story_mode_explanation = "You have chosen the story mode: Iraq Wars. Analyze the effects of the wars in Iraq on its oil and gas industry."
-            story_mode_description = "We can observe significant decreases in Iraq's oil production during the periods of the Iran-Iraq War and Gulf War, and alos a clear dip the year the Iraq War 2003 started. Interestingly we also see that the years leading up to the wars show a decline in production, possibly due to the increasing tensions and instability in the region."
+            story_mode_description = "We can observe significant decreases in Iraq's oil production during the periods of the Iran-Iraq War and Gulf War, and also a clear dip the year the Iraq War 2003 started. Interestingly we also see that the years leading up to the wars show an increase in production, possibly indicating efforts to maximize output before the anticipated conflicts. Overall, these wars had a profound impact on Iraq's oil production."
+            story_mode_description += "\n"
+            story_mode_description += "We can also observe that oil production steadily increases during each war, and that after the war ends, production quickly recovers and continues to grow. This could indicate that the oil infrastructure was not heavily damaged during these conflicts, or that there were rapid reconstruction efforts post-war to restore production levels, perhaps since oil is such a crucial part of Iraq's economy."
             return story_mode_explanation, story_mode_description
         else:
             return "Unknown Mode", ""
