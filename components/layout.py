@@ -1,4 +1,3 @@
-
 import dash
 from dash import html
 
@@ -20,7 +19,6 @@ def create_layout():
                     )
                 ]
             ),
-            
             html.Div(
                 id="main-container",
                 children=[

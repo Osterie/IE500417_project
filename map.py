@@ -12,7 +12,7 @@ def create_ghg_layout():
 
  
     # We use just the columns that we need for the map. 
-    df = data[["year", "country", "total_ghg"]].dropna()
+    df = data[["year", "country", "total_ghg - Mt"]].dropna()
 
     # Select a all unique years available in the dataset
     available_years = sorted(df['year'].dropna().unique())

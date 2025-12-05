@@ -42,6 +42,17 @@ def preprocess_data():
         )
 
     final_dataframe = final_dataframe.sort_values(by=["country", "year"])
+    
+    final_dataframe = final_dataframe.rename(columns={
+        'co2': 'co2 - Mt',
+        'gas_co2': 'gas_co2 - Mt',
+        'oil_co2': 'oil_co2 - Mt',
+        'co2_growth_abs': 'co2_growth_abs - Mt',
+        'co2_growth_prct': 'co2_growth_prct - %',
+        'cumulative_oil_co2': 'cumulative_oil_co2 - Mt',
+        'total_ghg': 'total_ghg - Mt'
+    })
+
             
     return final_dataframe
 

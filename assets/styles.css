@@ -44,6 +44,7 @@ label {
   grid-area: sidebar;
   background-color: #2f3542;
   color: white;
+  min-height: 100vh;
 }
 
 #sidebar h2 {
