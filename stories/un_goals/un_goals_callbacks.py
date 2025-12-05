@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 import plotly.express as px
 import pandas as pd
 
-from stories.fn_goals.fn_goals import FN_GOALS
+from stories.un_goals.un_goals import UN_GOALS
 from util import (
     assign_new_color,
     create_line_chart,
@@ -18,7 +18,7 @@ from util import (
 
 
 
-def register_fn_story_callbacks(processed_data):
+def register_un_story_callbacks(processed_data):
 
     def apply_country_colors_and_sort(fig):
         fig = go.Figure(fig)
@@ -65,14 +65,16 @@ def register_fn_story_callbacks(processed_data):
 
         return fig
 
-    def add_fn_markers(fig, prediction_mode):
+    def add_un_markers(fig, prediction_mode):
         fig = go.Figure(fig)
 
         prediction_on = bool(prediction_mode and "predict" in prediction_mode)
 
         markers = [
-            (FN_GOALS["paris_agreement_year"], "Paris Agreement", False),
-            (FN_GOALS["net_zero_year"], "Net-zero 2050", True),
+            (UN_GOALS["Rio_earth_summit"], "Rio Earth Summit", False),
+            (UN_GOALS["paris_agreement_year"], "Paris Agreement", False),
+            (UN_GOALS["cut_ghg_by_43%"], "cut ghg by 43%", False),
+            (UN_GOALS["net_zero_year"], "Net-zero 2050", True),
         ]
 
         for year, label, only_with_prediction in markers:
@@ -100,21 +102,23 @@ def register_fn_story_callbacks(processed_data):
 
         return fig
 
+    
+
     # Main Graph
 
     @callback(
-        Output("fn-graph-content", "figure"),
-        Output("fn-goals-indicator", "children"),
-        Input("fn-dropdown-selection", "value"),
-        Input("fn-year-range-slider", "value"),
-        Input("fn-show-rolling-average", "value"),
-        Input("fn-rolling-window-size", "value"),
-        Input("fn-enable-prediction", "value"),
-        Input("fn-model-selection", "value"),
-        Input("fn-polynomial-degree", "value"),
-        State("fn-graph-content", "figure")
+        Output("un-graph-content", "figure"),
+        Output("un-goals-indicator", "children"),
+        Input("un-dropdown-selection", "value"),
+        Input("un-year-range-slider", "value"),
+        Input("un-show-rolling-average", "value"),
+        Input("un-rolling-window-size", "value"),
+        Input("un-enable-prediction", "value"),
+        Input("un-model-selection", "value"),
+        Input("un-polynomial-degree", "value"),
+        State("un-graph-content", "figure")
     )
-    def update_fn_graph(
+    def update_un_graph(
         countries,
         year_range,
         show_rolling,
@@ -126,7 +130,7 @@ def register_fn_story_callbacks(processed_data):
     ):
         # Fixed axes for this story
         x_attr = "year"
-        y_attr = "co2 - Mt"
+        y_attr = "total_ghg - Mt"
 
         if (countries is None) or (year_range is None):
             raise PreventUpdate
@@ -174,7 +178,7 @@ def register_fn_story_callbacks(processed_data):
             fig,
         )
 
-        fig = add_fn_markers(fig, prediction_mode)
+        fig = add_un_markers(fig, prediction_mode)
 
         fig.update_layout(
             template="plotly_white",
@@ -190,16 +194,17 @@ def register_fn_story_callbacks(processed_data):
             ),
         )
 
-
         fig = enforce_nonnegative_y(fig)
 
         year_start, year_end = year_range
-        paris_year = FN_GOALS["paris_agreement_year"]
-        net_zero_year = FN_GOALS["net_zero_year"]
+        rio_summit = UN_GOALS["Rio_earth_summit"]
+        paris_year = UN_GOALS["paris_agreement_year"]
+        half_goal = UN_GOALS["cut_ghg_by_43%"]
+        net_zero_year = UN_GOALS["net_zero_year"]
         years_left = net_zero_year - year_end
 
         indicator_text = (
-            f"Paris Agreement in {paris_year}, and net-zero around {net_zero_year}. "
+            f"Rio Earth Summit in {rio_summit}, Paris Agreement in {paris_year}, goal to cut by 43% in {half_goal}, and net-zero around {net_zero_year}. "
             f"This view covers {year_start}–{year_end}; there are {years_left} years left to 2050."
         )
 
@@ -208,14 +213,14 @@ def register_fn_story_callbacks(processed_data):
     # Prediction and slider
 
     @callback(
-        Output("fn-model-selection-container", "style"),
-        Output("fn-year-range-slider", "max", allow_duplicate=True),
-        Output("fn-year-range-slider", "value", allow_duplicate=True),
-        Input("fn-enable-prediction", "value"),
-        State("fn-year-range-slider", "value"),
+        Output("un-model-selection-container", "style"),
+        Output("un-year-range-slider", "max", allow_duplicate=True),
+        Output("un-year-range-slider", "value", allow_duplicate=True),
+        Input("un-enable-prediction", "value"),
+        State("un-year-range-slider", "value"),
         prevent_initial_call="initial_duplicate",
     )
-    def toggle_fn_prediction_mode(prediction_mode, current_range):
+    def toggle_un_prediction_mode(prediction_mode, current_range):
         year_min = processed_data["year"].min()
         year_max = processed_data["year"].max()
         extend_year_max = year_max + 50
@@ -225,7 +230,7 @@ def register_fn_story_callbacks(processed_data):
 
         if prediction_mode and "predict" in prediction_mode:
             new_max = extend_year_max
-            new_range = current_range
+            new_range = [year_min, 2050]
             return {"display": "block"}, new_max, new_range
         else:
             new_max = year_max
@@ -235,19 +240,41 @@ def register_fn_story_callbacks(processed_data):
             ]
             return {"display": "none"}, new_max, new_range
 
+
+    @callback(
+    Output("un-polynomial-degree-container", "style"),
+    Input("un-model-selection", "value"),
+    Input("un-enable-prediction", "value"),
+    )
+    def toggle_un_polynomial_degree(model_selection, prediction_mode):
+        if not (prediction_mode and "predict" in prediction_mode):
+            return {"display": "none", "marginTop": "10px"}
+
+        if not model_selection:
+            return {"display": "none", "marginTop": "10px"}
+
+        selected = model_selection if isinstance(model_selection, list) else [model_selection]
+
+        if "polynomial" in selected:
+            return {"display": "block", "marginTop": "10px"}
+
+        return {"display": "none", "marginTop": "10px"}
+
+
+    
     # Poduction and consumption graphs
 
     @callback(
-        Output("fn-prod-graph", "figure"),
-        Output("fn-cons-graph", "figure"),
-        Input("fn-dropdown-selection", "value"),
-        Input("fn-year-range-slider", "value"),
-        Input("fn-show-rolling-average", "value"),
-        Input("fn-rolling-window-size", "value"),
-        Input("fn-enable-prediction", "value"),
-        Input("fn-model-selection", "value"),
-        Input("fn-polynomial-degree", "value"),
-        State("fn-graph-content", "figure"),
+        Output("un-prod-graph", "figure"),
+        Output("un-cons-graph", "figure"),
+        Input("un-dropdown-selection", "value"),
+        Input("un-year-range-slider", "value"),
+        Input("un-show-rolling-average", "value"),
+        Input("un-rolling-window-size", "value"),
+        Input("un-enable-prediction", "value"),
+        Input("un-model-selection", "value"),
+        Input("un-polynomial-degree", "value"),
+        State("un-graph-content", "figure"),
     )
     def update_prod_cons_graphs(
         countries,
@@ -352,7 +379,7 @@ def register_fn_story_callbacks(processed_data):
                     prod_fig,
                 )
 
-        prod_fig = add_fn_markers(prod_fig, prediction_mode)
+        prod_fig = add_un_markers(prod_fig, prediction_mode)
 
         prod_fig.update_layout(
             template="plotly_white",
@@ -439,7 +466,7 @@ def register_fn_story_callbacks(processed_data):
                     cons_fig,
                 )
 
-        cons_fig = add_fn_markers(cons_fig, prediction_mode)
+        cons_fig = add_un_markers(cons_fig, prediction_mode)
 
         cons_fig.update_layout(
             template="plotly_white",

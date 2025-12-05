@@ -1,7 +1,7 @@
 from dash import html, dcc, Input, Output, callback
 from stories.war.war_story_layout import create_war_story_layout
 from stories.price.price_story_layout import create_price_story_layout
-from stories.fn_goals.fn_goals_layout import create_fn_story_layout
+from stories.un_goals.un_goals_layout import create_un_story_layout
 
 def create_stories_layout():
     return html.Div(
@@ -23,7 +23,7 @@ def update_output(selected_story):
         return create_war_story_layout()
     
     elif selected_story == 'EU\'s progression towards UN sustainability goals':
-        return create_fn_story_layout()
+        return create_un_story_layout()
     
     elif selected_story == 'Do fluctuations in oil and gas prices affect CO2 emissions?':
         return create_price_story_layout()

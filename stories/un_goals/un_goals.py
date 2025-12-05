@@ -1,19 +1,22 @@
 """
-Config and constants for the UN / FN sustainability goals story.
+Config and constants for the UN / un sustainability goals story.
 """
 
-FN_GOALS = {
+UN_GOALS = {
+    # Rio Earth Summit
+    "Rio_earth_summit": 1992,
+
     # Paris Agreement adoption
     "paris_agreement_year": 2015,
 
-    # Net-half framing year (global)
-    "net_half_year" : 2030,
+    # Cut ghg by 43% (global)
+    "cut_ghg_by_43%" : 2030,
 
     # Net-zero framing year (global)
     "net_zero_year": 2050,
 }
 
-DEFAULT_FN_COUNTRIES = [
+DEFAULT_UN_COUNTRIES = [
     "Germany",
     "France",
     "Italy",

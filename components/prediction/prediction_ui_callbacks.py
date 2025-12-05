@@ -33,7 +33,7 @@ def register_prediction_ui_callbacks(processed_data):
     @callback(
         Output("polynomial-degree-container", "style"),
         Input("model-selection", "value"),
-        Input("enable-prediction", "value"),  
+        Input("enable-prediction", "value"),
     )
     def toggle_polynomial_degree(model_selection, prediction_mode):
         if not (prediction_mode and "predict" in prediction_mode):
@@ -42,10 +42,7 @@ def register_prediction_ui_callbacks(processed_data):
         if not model_selection:
             return {"display": "none", "marginTop": "10px"}
 
-        if isinstance(model_selection, str):
-            selected = [model_selection]
-        else:
-            selected = model_selection
+        selected = model_selection if isinstance(model_selection, list) else [model_selection]
 
         if "polynomial" in selected:
             return {"display": "block", "marginTop": "10px"}
