@@ -9,6 +9,7 @@ from components.prediction.prediction_ui_callbacks import register_prediction_ui
 from stories.price.price_data_loader import get_combined_price_data
 from stories.war.war_story_callbacks import register_war_story_callbacks
 from stories.price.price_story_callbacks import register_price_story_callbacks
+from stories.fn_goals.fn_goals_callbacks import register_fn_story_callbacks
 from data_store import processed_data
 
 
@@ -24,7 +25,11 @@ register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
 register_prediction_ui_callbacks(processed_data)
 register_war_story_callbacks(processed_data)
+<<<<<<< HEAD
 register_price_story_callbacks()
+=======
+register_fn_story_callbacks(processed_data)
+>>>>>>> e829daf40ff8612aedfc9b7920d6d5691b47c212
 
 app.processed_data = processed_data
 
