@@ -25,11 +25,8 @@ register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
 register_prediction_ui_callbacks(processed_data)
 register_war_story_callbacks(processed_data)
-<<<<<<< HEAD
 register_price_story_callbacks()
-=======
 register_fn_story_callbacks(processed_data)
->>>>>>> e829daf40ff8612aedfc9b7920d6d5691b47c212
 
 app.processed_data = processed_data
 
