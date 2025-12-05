@@ -7,6 +7,7 @@ from components.callbacks_correlation import register_correlation_callbacks
 from components.callbacks_slider import register_slider_callbacks
 from components.prediction.prediction_ui_callbacks import register_prediction_ui_callbacks
 from stories.war.war_story_callbacks import register_war_story_callbacks
+from stories.fn_goals.fn_goals_callbacks import register_fn_story_callbacks
 from data_store import processed_data
 
 
@@ -22,6 +23,7 @@ register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
 register_prediction_ui_callbacks(processed_data)
 register_war_story_callbacks(processed_data)
+register_fn_story_callbacks(processed_data)
 
 app.processed_data = processed_data
 
