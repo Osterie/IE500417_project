@@ -1,5 +1,6 @@
 from dash import html, dcc, Input, Output, callback
 from stories.war.war_story_layout import create_war_story_layout
+from stories.price.price_story_layout import create_price_story_layout
 
 def create_stories_layout():
     return html.Div(
@@ -22,4 +23,4 @@ def update_output(selected_story):
         return "hello"
     
     elif selected_story == 'BAKRI SIN STORY':
-        return "hello"
+        return create_price_story_layout()
