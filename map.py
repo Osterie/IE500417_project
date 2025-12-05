@@ -51,12 +51,12 @@ def create_ghg_layout():
 )
 def update_map(selected_year):
     year_to_show = int(selected_year[1])
-    filtered_df = processed_data[processed_data['year'] == year_to_show]
+    filtered_df = processed_data[processed_data['year'] == year_to_show].copy()
     fig = px.choropleth(
         filtered_df,
         locations="country",
         locationmode='country names',
-        color="total_ghg",
+        color="total_ghg - Mt",
         hover_name="country",
         projection="natural earth",
         title=f"Total Greenhouse Gas Emissions in {year_to_show}",
