@@ -172,4 +172,4 @@ def create_prediction_controls(model_selection_container, enable_prediction_id, 
     ])
 
 def create_title():
-    return html.H1("Data Visualization", style={"textAlign": "center"})
+    return html.H1("Visualization Tool for Seeing How the Oil and Gas Industry Relates to Emissions", style={"textAlign": "center"})
