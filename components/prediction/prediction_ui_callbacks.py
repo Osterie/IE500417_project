@@ -7,10 +7,11 @@ def register_prediction_ui_callbacks(processed_data):
         Output("year-range-slider", "max", allow_duplicate=True),
         Output("year-range-slider", "value", allow_duplicate=True),
         Input("enable-prediction", "value"),
+        Input("dropdown-selection-x", "value"),   # ✅ new
         State("year-range-slider", "value"),
         prevent_initial_call="initial_duplicate",
     )
-    def toggle_prediction_mode(prediction_mode, current_range):
+    def toggle_prediction_mode(prediction_mode, x_attr, current_range):
         year_min = processed_data["year"].min()
         year_max = processed_data["year"].max()
         extend_year_max = year_max + 50
@@ -18,6 +19,14 @@ def register_prediction_ui_callbacks(processed_data):
         if current_range is None:
             current_range = [year_min, year_max]
 
+        # Only manipulate the year slider if we're actually using year on X
+        if x_attr != "year":
+            # Just show/hide model UI, don't touch slider
+            if prediction_mode and "predict" in prediction_mode:
+                return {"display": "block"}, year_max, current_range
+            return {"display": "none"}, year_max, current_range
+
+        # Original year behavior
         if prediction_mode and "predict" in prediction_mode:
             new_max = extend_year_max
             new_range = current_range

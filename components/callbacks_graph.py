@@ -46,29 +46,44 @@ def register_graph_callbacks(processed_data):
                 final_color_map[country] = existing_color_map[country]
             else:
                 final_color_map[country] = assign_new_color(existing_color_map)
-
+                
+        effective_range = None
 
         if x_attr == "year":
+            # Only filter by year range when x is year
             dff = get_data_in_year_range(dff, year_range)
+            if dff.empty:
+                raise PreventUpdate
+
             fig = create_line_chart(dff, x_attr, y_attr, final_color_map)
 
-            fig = do_rolling_average(show_rolling, rolling_window, countries, dff, fig, y_attr)
-
-            fig = do_prediction(
-                prediction_mode,
-                model_selection,
-                processed_data,
+            # Rolling average only makes sense for time
+            fig = do_rolling_average(
+                show_rolling,
+                rolling_window,
                 countries,
-                x_attr,
-                y_attr,
-                year_range,
-                poly_degree,
-                fig
+                dff,
+                fig,
+                y_attr
             )
+
+            effective_range = year_range 
 
         else:
             fig = create_scatter_chart(dff, x_attr, y_attr, final_color_map)
+            effective_range = None 
 
+        fig = do_prediction(
+            prediction_mode,
+            model_selection,
+            processed_data,
+            countries,
+            x_attr,
+            y_attr,
+            effective_range,
+            poly_degree,
+            fig
+        )
         fig.update_layout(
             template="plotly_white",
             title=f"{y_attr} vs {x_attr}",
