@@ -1,5 +1,3 @@
-# stories/fn_goals/fn_goals_layout.py
-
 from dash import html, dcc
 from data_store import processed_data
 from components.home_main_layout import (
@@ -24,7 +22,7 @@ def create_fn_story_layout():
             html.Div(
                 className="control-grid",
                 children=[
-                    # Countries (custom multi-dropdown)
+                    # Countries
                     html.Div([
                         html.Label("Select countries/regions:"),
                         dcc.Dropdown(
@@ -51,7 +49,7 @@ def create_fn_story_layout():
                 ],
             ),
 
-            # Year range slider – moved above the graphs
+            # Year range slider
             html.Div(
                 id="fn-slider-container",
                 children=[

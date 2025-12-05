@@ -1,5 +1,3 @@
-# stories/fn_goals/fn_goals_callbacks.py
-
 from dash import callback, Input, Output, State
 from dash.exceptions import PreventUpdate
 import plotly.graph_objects as go
@@ -9,7 +7,6 @@ import pandas as pd
 from stories.fn_goals.fn_goals import FN_GOALS
 from util import (
     create_line_chart,
-    create_scatter_chart,   # kept in case you want it later
     get_data_for_countries,
     get_data_in_year_range,
     do_rolling_average,
@@ -19,7 +16,7 @@ from util import (
 
 def register_fn_story_callbacks(processed_data):
 
-    # ---------- COLOR MAP + HELPERS ----------
+    # colour map and helper
 
     ALL_COUNTRIES = sorted(processed_data["country"].dropna().unique())
     BASE_COLORS = px.colors.qualitative.Plotly
@@ -30,13 +27,8 @@ def register_fn_story_callbacks(processed_data):
     }
 
     def apply_country_colors_and_sort(fig):
-        """
-        1) Sort traces so that all traces for the same country appear together in the legend.
-        2) Apply a consistent color for each country across all traces/graphs.
-        """
         fig = go.Figure(fig)
 
-        # Sort traces by (country, name)
         traces = list(fig.data)
 
         def parse_key(tr):
@@ -62,10 +54,6 @@ def register_fn_story_callbacks(processed_data):
         return fig
 
     def enforce_nonnegative_y(fig):
-        """
-        Force the y-axis to start at 0, regardless of negative values.
-        Sets range=[0, max_y * 1.05] based on the data in the figure.
-        """
         fig = go.Figure(fig)
 
         max_y = None
