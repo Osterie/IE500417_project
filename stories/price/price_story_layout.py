@@ -1,7 +1,7 @@
 from dash import html, dcc
 from stories.price.price_data_loader import get_combined_price_data
 
-# Get data
+
 price_df = get_combined_price_data()
 
 def create_price_story_layout():
@@ -10,49 +10,88 @@ def create_price_story_layout():
         children=[
             html.H2("Price vs CO2 Analysis"),
             
+            
             html.Div(
                 className="controls-container",
+                
+                style={'display': 'flex', 'gap': '30px', 'margin-bottom': '20px'},
                 children=[
                     
-                    html.Label("Select Country:"),
-                    dcc.Dropdown(
-                        id='price-dropdown',
-                        options=[{'label': c, 'value': c} for c in price_df['country'].unique()],
-                        value='World',
-                        clearable=False
+                    
+                    html.Div(children=[
+                        html.Label("Select Country:"),
+                        dcc.Dropdown(
+                            id='price-dropdown',
+                            options=[{'label': c, 'value': c} for c in price_df['country'].unique()],
+                            value=['Germany', 'Italy','Japan'], 
+                            multi=True,
+                            clearable=False
+                        ),
+                    ]), 
+
+                    
+                    
+                    html.Div(children=[
+                        html.Label("Select Y-axis (Emissions):"),
+                        dcc.Dropdown(
+                            id='price-dropdown-select-y',
+                            options=[
+                                {'label': 'CO2 Emissions', 'value': 'co2 - Mt'}
+                            ],
+                            value='co2 - Mt', 
+                            clearable=False
+                        ),
+                    ]), 
+                    
+                    
+                    html.Div(children=[
+                        html.Label("Select TrendLine Option:"),
+                        dcc.Dropdown(
+                            id="trendline-option-dropdown",
+                            options=[
+                                {'label': 'No Trendline', 'value': 'none'},
+                                {'label': 'Show Linear Trendline (OLS)', 'value': 'ols'},
+                                {'label': 'Show Local Trendline (Lowess)', 'value': 'lowess'}
+                                
+
+                            
+                            ],
+                            value='none',
+                            clearable=False
+                        )
+                    ]),
+                ]
+            ), 
+
+            
+            
+            html.Div(
+                className="graph-view-container",
+                style={'margin-top': '20px'},
+                children=[
+                    
+                    html.Div(
+                        className="graph-container",
+                        style={'width': '45%'},
+                        children=[
+                            html.H3("Oil Price ($) vs CO2 Emissions"),
+                            dcc.Graph(id='oil-price-graph')
+                        ]
                     ),
 
                     
-                    html.Label("Select X-axis (Price):"),
-                    dcc.Dropdown(
-                        id='price-dropdown-select-x',
-                        options=[
-                            {'label': 'Oil Price ($)', 'value': 'Oil Price ($)'},
-                            {'label': 'Gas Price ($)', 'value': 'Gas Price ($)'}
-                        ],
-                        value='Oil Price ($)', 
-                        clearable=False
-                    ),
-
-                    
-                    html.Label("Select Y-axis (Emissions):"),
-                    dcc.Dropdown(
-                        id='price-dropdown-select-y',
-                        options=[
-                            {'label': 'CO2 Emissions', 'value': 'co2 - Mt'}
-                        ],
-                        value='co2 - Mt', 
-                        clearable=False
-                    ),
+                    html.Div(
+                        className="graph-container",
+                        style={'width': '45%'},
+                        children=[
+                            html.H3("Gas Price ($) vs CO2 Emissions"),
+                            dcc.Graph(id='gas-price-graph')
+                        ]
+                    )
                 ]
             ),
-
-            # Graph container
-            html.Div(className="graph-card", children=[
-                dcc.Graph(id='price-story-graph')
-            ]),
-
-            # Slider container
+            
+            
             html.Div(
                 children=[
                     dcc.RangeSlider(
@@ -65,7 +104,7 @@ def create_price_story_layout():
                         tooltip={"placement": "bottom", "always_visible": True},
                     )
                 ],
-                style={"margin-top": "20px", "padding": "0 20px"}
-            ),
+                style={'margin-top': '30px', 'margin-left': '5px', 'margin-right': '5px'}
+            )
         ]
     )
