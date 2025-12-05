@@ -26,7 +26,8 @@ def create_war_story_layout():
         "oil_co2 - Mt",
         "co2_growth_abs - Mt",
         "co2_growth_prct - %",
-        "cumulative_oil_co2 - Mt"
+        "cumulative_oil_co2 - Mt",
+        "total_ghg - Mt"
     ]
     
     

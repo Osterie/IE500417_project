@@ -49,7 +49,8 @@ def preprocess_data():
         'oil_co2': 'oil_co2 - Mt',
         'co2_growth_abs': 'co2_growth_abs - Mt',
         'co2_growth_prct': 'co2_growth_prct - %',
-        'cumulative_oil_co2': 'cumulative_oil_co2 - Mt'
+        'cumulative_oil_co2': 'cumulative_oil_co2 - Mt',
+        'total_ghg': 'total_ghg - Mt'
     })
 
             

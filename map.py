@@ -12,7 +12,7 @@ def create_ghg_layout():
 
  
     # We use just the columns that we need for the map. 
-    df = data[["year", "country", "total_ghg"]].dropna()
+    df = data[["year", "country", "total_ghg - Mt"]].dropna()
 
     # Select a all unique years available in the dataset
     available_years = sorted(df['year'].dropna().unique())
@@ -60,9 +60,9 @@ def create_ghg_layout():
             filtered_df,
             locations="country",
             locationmode='country names',
-            color="total_ghg",
+            color="total_ghg - Mt",
             hover_name="country",
-            size="total_ghg",
+            size="total_ghg - Mt",
             projection="natural earth",
             title=f"Total Greenhouse Gas Emissions in {selected_year}",
     )
