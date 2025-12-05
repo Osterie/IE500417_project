@@ -1,4 +1,4 @@
-year,country,oil production - TWh,gas production - TWh,oil consumption - TWh,gas consumption - TWh,co2,gas_co2,oil_co2,population,gdp,co2_growth_abs,co2_growth_prct,co2_per_unit_energy,total_ghg,cumulative_oil_co2,methane
+year,country,oil production - TWh,gas production - TWh,oil consumption - TWh,gas consumption - TWh,co2 - Mt,gas_co2 - Mt,oil_co2 - Mt,population,gdp,co2_growth_abs - Mt,co2_growth_prct - %,co2_per_unit_energy,total_ghg,cumulative_oil_co2 - Mt,methane
 1965,Africa,1235.101,,341.07257,9.57193,213.634,2.123,75.982,321013569.0,,19.995,10.326,0.437,1867.017,755.493,522.775
 1966,Africa,1571.8269,,369.46457,10.6980915,221.082,2.36,83.845,329252360.0,,7.448,3.486,0.437,1869.86,839.338,596.237
 1967,Africa,1729.137,,368.28156,10.573844,237.045,2.319,80.898,337851070.0,,15.963,7.22,0.468,1969.387,920.236,627.802

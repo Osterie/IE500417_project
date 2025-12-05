@@ -39,9 +39,9 @@ def create_price_story_layout():
                     dcc.Dropdown(
                         id='price-dropdown-select-y',
                         options=[
-                            {'label': 'CO2 Emissions', 'value': 'co2'}
+                            {'label': 'CO2 Emissions', 'value': 'co2 - Mt'}
                         ],
-                        value='co2', 
+                        value='co2 - Mt', 
                         clearable=False
                     ),
                 ]

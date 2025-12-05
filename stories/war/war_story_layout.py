@@ -21,9 +21,12 @@ def create_war_story_layout():
         "gas production - TWh",
         "oil consumption - TWh",
         "gas consumption - TWh",
-        "co2",
-        "gas_co2",
-        "oil_co2"
+        "co2 - Mt",
+        "gas_co2 - Mt",
+        "oil_co2 - Mt",
+        "co2_growth_abs - Mt",
+        "co2_growth_prct - %",
+        "cumulative_oil_co2 - Mt"
     ]
     
     

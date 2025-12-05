@@ -103,7 +103,7 @@ def register_stacked_chart_callbacks(app, processed_data):
 
 
         elif selected_dataset == "oil_gas_emissions":
-            y_axis = ["oil_co2", "gas_co2"]
+            y_axis = ["oil_co2 - Mt", "gas_co2 - Mt"]
             title = f"Oil and Gas CO2 Emissions in {selected_year}"
             y_label = "CO2 Emissions (MtCO2)"   
 

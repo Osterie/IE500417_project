@@ -11,7 +11,7 @@ def create_main_layout(processed_data):
                 children=[
                     create_country_selection(processed_data, 'dropdown-selection', default_country='World'),
                     create_x_axis_selection(processed_data, 'dropdown-selection-x', default_x='year'),
-                    create_y_axis_selection(processed_data, 'dropdown-selection-y', default_y='co2'),
+                    create_y_axis_selection(processed_data, 'dropdown-selection-y', default_y='co2 - Mt'),
                     create_rolling_average_selection('show-rolling-average', 'rolling-window-size'),
                     create_prediction_controls('model-selection-container', 'enable-prediction', 'model-selection', 'polynomial-degree')
                 ]
