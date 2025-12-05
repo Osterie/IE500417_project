@@ -76,14 +76,24 @@ def register_war_story_callbacks(processed_data):
 
         for war_key in selected_wars:
             war = wars[war_key]
+            if (war["name"] in ["Soviet–Afghan War", "Russia Invades Ukraine", "War in Afghanistan"]):
+                y_offset = -20
+            else:
+                y_offset = 0
+
             fig.add_vrect(
                 x0=war["start"],
                 x1=war["end"],
                 fillcolor="red",
                 opacity=0.15,
                 line_width=0,
-                annotation_text=war["name"],
-                annotation_position="top left"
+                annotation=dict(
+                    text=war["name"],
+                    x=war["start"],
+                    yshift = y_offset,
+                    showarrow=False,
+                    yanchor="top"
+                )
             )
 
         return fig
