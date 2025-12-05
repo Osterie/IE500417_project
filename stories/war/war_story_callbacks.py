@@ -3,8 +3,10 @@ from stories.war.wars import wars
 import plotly.graph_objects as go
 from dash.exceptions import PreventUpdate
 from util import (
+    assign_new_color,
     create_line_chart,
     create_scatter_chart,
+    extract_existing_colors,
     get_data_for_countries,
     get_data_in_year_range,
     do_rolling_average,
@@ -25,20 +27,32 @@ def register_war_story_callbacks(processed_data):
         Input('war-model-selection', 'value'),
         Input('war-polynomial-degree', 'value'),
         Input("war-selector", "value"),
+        State('war-graph-content', 'figure'),
         prevent_initial_call=True,
     )
-    def update_graph(countries, x_attr, y_attr, year_range, show_rolling, rolling_window, prediction_mode, model_selection, poly_degree, selected_wars):
+    def update_graph(countries, x_attr, y_attr, year_range, show_rolling, rolling_window, prediction_mode, model_selection, poly_degree, selected_wars, existing_figure):
         if (countries is None) or (x_attr is None) or (y_attr is None):
             raise PreventUpdate
 
         if isinstance(countries, str):
             countries = [countries]
             
+        existing_color_map = extract_existing_colors(existing_figure)
+
+        final_color_map = {}
+
+        for country in countries:
+            if country in existing_color_map:
+                final_color_map[country] = existing_color_map[country]
+            else:
+                final_color_map[country] = assign_new_color(existing_color_map)
+
+            
         dff = get_data_for_countries(processed_data, countries)
 
         if x_attr == "year":
             dff = get_data_in_year_range(dff, year_range)
-            fig = create_line_chart(dff, x_attr, y_attr)
+            fig = create_line_chart(dff, x_attr, y_attr, final_color_map)
 
             fig = do_rolling_average(show_rolling, rolling_window, countries, dff, fig, y_attr)
 
@@ -55,7 +69,7 @@ def register_war_story_callbacks(processed_data):
             )
 
         else:
-            fig = create_scatter_chart(dff, x_attr, y_attr)
+            fig = create_scatter_chart(dff, x_attr, y_attr, final_color_map)
             
         fig = add_wars(fig, selected_wars)
 
