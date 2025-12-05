@@ -7,7 +7,8 @@ def create_stories_layout():
     return html.Div(
         className="stores-container",
         children= [
-            dcc.Dropdown(['How does war affect the oil and gas industry?', 'EU\'s progression towards UN sustainability goals', 'BAKRI SIN STORY'], 'NYC', id='story-dropdown'),
+            html.H1('Please select a story:'),
+            dcc.Dropdown(['How does war affect the oil and gas industry?', 'EU\'s progression towards UN sustainability goals', 'BAKRI SIN STORY'], 'How does war affect the oil and gas industry?', id='story-dropdown'),
             html.Div(id='story-area')
         ]
     )
