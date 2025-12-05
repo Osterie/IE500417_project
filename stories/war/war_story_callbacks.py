@@ -71,7 +71,7 @@ def register_war_story_callbacks(processed_data):
         else:
             fig = create_scatter_chart(dff, x_attr, y_attr, final_color_map)
             
-        fig = add_wars(fig, selected_wars)
+        fig = add_wars(fig, selected_wars, year_range)
 
         fig.update_layout(
             template="plotly_white",
@@ -82,7 +82,7 @@ def register_war_story_callbacks(processed_data):
 
         return fig
 
-    def add_wars(fig, selected_wars):
+    def add_wars(fig, selected_wars, year_range):
         if not selected_wars:
             return fig
 
@@ -94,6 +94,9 @@ def register_war_story_callbacks(processed_data):
                 y_offset = -20
             else:
                 y_offset = 0
+                
+            if war["end"] < year_range[0] or war["start"] > year_range[1]:
+                continue
 
             fig.add_vrect(
                 x0=war["start"],
