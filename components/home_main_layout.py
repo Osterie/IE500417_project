@@ -1,5 +1,7 @@
 from dash import html, dcc
+from components.stacked_chart import create_stacked_chart_layout
 from map import create_ghg_layout
+
 
 def create_main_layout(processed_data):
     return html.Div(
@@ -124,7 +126,8 @@ def create_main_layout(processed_data):
             html.Div(
                 create_ghg_layout(),
                 style={"marginTop": "40px"}
-            )
+            ),
+            create_stacked_chart_layout()
         ]
     )
     

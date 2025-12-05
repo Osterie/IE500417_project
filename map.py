@@ -30,45 +30,53 @@ def create_ghg_layout():
     
         html.Div([
             html.Label("Select Year:"),
-            dcc.Slider(
+            dcc.RangeSlider(
                 id='year-slider',
                 min=min(available_years),
                 max=max(available_years),
-                value=max(available_years),
-                marks={str(year): str(year) for year in available_years[::5]},
+                value=[min(available_years), last_year],
+                marks=None,
                 step=1,
                 tooltip={"placement": "bottom", "always_visible": True},
         
         )
     ])
 ])
+    return layout
 
 # Get the callback to update the map based on the selected year
-    @callback(
-        Output('ghg-map', 'figure'),
-        Input('year-slider', 'value')
+@callback(
+    Output('ghg-map', 'figure'),
+    Input('year-slider', 'value')
 )
-
-
-
-
-
-
-    def update_map(selected_year):
-        filtered_df = df[df['year'] == selected_year]
-        fig = px.scatter_geo(
-            filtered_df,
-            locations="country",
-            locationmode='country names',
-            color="total_ghg",
-            hover_name="country",
-            size="total_ghg",
-            projection="natural earth",
-            title=f"Total Greenhouse Gas Emissions in {selected_year}",
+def update_map(selected_year):
+    year_to_show = int(selected_year[1])
+    filtered_df = processed_data[processed_data['year'] == year_to_show]
+    fig = px.choropleth(
+        filtered_df,
+        locations="country",
+        locationmode='country names',
+        color="total_ghg",
+        hover_name="country",
+        projection="natural earth",
+        title=f"Total Greenhouse Gas Emissions in {year_to_show}",
+)
+    fig.update_layout(
+        geo=dict(
+            showland=True,
+            landcolor="lightgreen",
+            showcountries=True,
+            countrycolor="Black"
+        )
     )
-        fig.update_layout(geo=dict(showland=True, landcolor="LightGreen"))
-        return fig
+    return fig
 
 
 
-    return layout
+
+
+
+
+
+
+

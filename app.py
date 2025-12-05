@@ -1,5 +1,6 @@
 import pandas as pd
 from dash import Dash
+from components.stacked_chart import register_stacked_chart_callbacks
 from components.layout import create_layout
 from components.tabs import create_tabs_layout
 from components.callbacks_graph import register_graph_callbacks
@@ -20,6 +21,7 @@ register_graph_callbacks(processed_data)
 register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
 register_prediction_ui_callbacks(processed_data)
+register_stacked_chart_callbacks(processed_data)
 
 app.processed_data = processed_data
 

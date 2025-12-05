@@ -51,13 +51,11 @@ def create_stacked_chart_layout():
 
 # Callback to update the stacked chart based on graph and slider inputs.    
 
-def register_stacked_chart_callbacks(app, processed_data):
+def register_stacked_chart_callbacks(processed_data):
     # We first update the slider range based on the selected dataset
-    @app.callback(
+    @callback(
         Output("stacked-chart-year-slider", "min"),
         Output("stacked-chart-year-slider", "max"),
-        Output("stacked-chart-year-slider", "value"),
-        Output("stacked-chart-year-slider", "marks"),
         Input("stacked-chart-dropdown", "value"),
     )
 
@@ -72,10 +70,10 @@ def register_stacked_chart_callbacks(app, processed_data):
         # Find min and max years in the filtered data
         min_year = data_filtered["year"].min()
         max_year = data_filtered["year"].max()
-        return min_year, max_year, max_year
+        return min_year, max_year
     
     # Now we update the graph when the slider or dropdown changes
-    @app.callback(
+    @callback(
         Output("stacked-chart-graph", "figure"),
         Input("stacked-chart-dropdown", "value"),
         Input("stacked-chart-year-slider", "value"),
@@ -84,8 +82,10 @@ def register_stacked_chart_callbacks(app, processed_data):
     # Function to update the stacked chart graph based on the selected dataset and selected year
     def update_stacked_chart_graph(selected_dataset, selected_year):
         regions_data = ["North America", "Europe", "Asia", "Africa", "South America", "Oceania"]
+        print(selected_dataset, selected_year)
         if selected_dataset is None or selected_year is None:
             raise PreventUpdate
+        
         
         data_filtered = processed_data[
             (processed_data["country"].isin(regions_data)) &
@@ -123,7 +123,7 @@ def register_stacked_chart_callbacks(app, processed_data):
             y=y_axis,
             title=title,
             labels={"value": y_label, "country": "Region", "variable": "Energy Source"},
-            barmode="group",
+            barmode="stack",
         )
         fig.update_layout(xaxis_title="Region", yaxis_title=y_label)
 
