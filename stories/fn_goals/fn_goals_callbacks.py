@@ -7,6 +7,7 @@ import pandas as pd
 from stories.fn_goals.fn_goals import FN_GOALS
 from util import (
     create_line_chart,
+    create_line_chart_old,
     get_data_for_countries,
     get_data_in_year_range,
     do_rolling_average,
@@ -135,7 +136,7 @@ def register_fn_story_callbacks(processed_data):
     ):
         # Fixed axes for this story
         x_attr = "year"
-        y_attr = "co2"
+        y_attr = "co2 - Mt"
 
         if (countries is None) or (year_range is None):
             raise PreventUpdate
@@ -151,7 +152,7 @@ def register_fn_story_callbacks(processed_data):
         if dff.empty:
             raise PreventUpdate
 
-        fig = create_line_chart(dff, x_attr, y_attr)
+        fig = create_line_chart_old(dff, x_attr, y_attr)
 
         fig = do_rolling_average(
             show_rolling,

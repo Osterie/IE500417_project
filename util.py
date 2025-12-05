@@ -12,7 +12,7 @@ def _get_country_color(fig, country_name):
                 return line.color
     return None
 
-def create_line_chart(dff, x_attr, y_attr):
+def create_line_chart_old(dff, x_attr, y_attr):
     fig = px.line(dff, x=x_attr, y=y_attr, color="country")
     return fig
 
