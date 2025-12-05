@@ -20,7 +20,7 @@ def register_prediction_ui_callbacks(processed_data):
 
         if prediction_mode and "predict" in prediction_mode:
             new_max = extend_year_max
-            new_range = [current_range[0], new_max]
+            new_range = current_range
             return {"display": "block"}, new_max, new_range
         else:
             new_max = year_max
@@ -33,7 +33,7 @@ def register_prediction_ui_callbacks(processed_data):
     @callback(
         Output("polynomial-degree-container", "style"),
         Input("model-selection", "value"),
-        Input("enable-prediction", "value"),   # 👈 also depend on prediction toggle
+        Input("enable-prediction", "value"),  
     )
     def toggle_polynomial_degree(model_selection, prediction_mode):
         if not (prediction_mode and "predict" in prediction_mode):

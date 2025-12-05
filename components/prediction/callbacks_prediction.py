@@ -63,11 +63,18 @@ def add_prediction(
     }
 
     for c in countries:
-        df_c = (
-            processed_data[processed_data["country"] == c]
-            .dropna(subset=[x_attr, y_attr])
-            .sort_values(x_attr)
-        )
+        df_c = processed_data[
+            (processed_data["country"] == c)
+        ].dropna(subset=[x_attr, y_attr])
+
+        # If we're predicting over time, restrict training data to selected years
+        if x_attr == "year":
+            real_year_max = processed_data["year"].max()
+            fit_start = year_range[0]
+            fit_end = min(year_range[1], real_year_max)
+
+            df_c = df_c[(df_c["year"] >= fit_start) & (df_c["year"] <= fit_end)]
+
         if len(df_c) < 2:
             continue
 
