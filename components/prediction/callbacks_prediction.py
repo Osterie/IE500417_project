@@ -6,7 +6,7 @@ from sklearn.preprocessing import PolynomialFeatures
 from sklearn.ensemble import RandomForestRegressor
 
 try:
-    from statsmodels.nonparametric.smoothers_lowess import lowess
+    from statsmodels.nonparametric.smoothers_lowess import lowess # type: ignore
     _HAS_LOWESS = True
 except ImportError:
     _HAS_LOWESS = False
