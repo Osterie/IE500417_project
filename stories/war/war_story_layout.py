@@ -101,7 +101,7 @@ def create_war_story_layout():
                 style={"display": "none"}
             ),
             
-            html.H2("Observations", id='war-selected-story-description-title', style={"fontWeight": "bold", "marginBottom": "20px"}),
-            html.Div(id='war-selected-story-description', style={"fontWeight": "bold"}),
+            html.H1("Observations", id='war-selected-story-description-title', style={"fontWeight": "bold", "marginBottom": "20px"}),
+            html.P(id='war-selected-story-description', style={"fontWeight": "bold"}),
         ]
     )

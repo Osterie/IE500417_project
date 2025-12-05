@@ -150,7 +150,7 @@ def register_war_story_callbacks(processed_data):
             return story_mode_explanation, story_mode_description
         elif selected_story_mode == "Global Conflicts":
             story_mode_explanation = "You have chosen the story mode: Global Conflicts. Explore the impact of global conflicts on the oil and gas industry."
-            story_mode_description = "As you can see on the graph, there is a notable dip in the worlds oil production for "
+            story_mode_description = "As you can see on the graph, there is a large dip in the worlds oil production when the Soviet-Afghan war and Iran-Iraq war started, around 1979. Interestingly we do not see a notable dip in oil production during any of the other wars we have included. Infact, during the period of the Vitenam war (from when USA got involved), we see a huge increase in oil production globally. This could be due to various factors such as increased demand for oil to support the war effort, or perhaps other geopolitical factors at play during that time. We can see that in 1965, at the start of USA's involvement in the war, the global production of oil was around 18 000 TWh, whilst 10 years later, in 1975, the production war around 32 000 TWh. This is about a 78% increase in production over a decade."
             return story_mode_explanation, story_mode_description
         elif selected_story_mode == "Iraq Wars":
             story_mode_explanation = "You have chosen the story mode: Iraq Wars. Analyze the effects of the wars in Iraq on its oil and gas industry."
