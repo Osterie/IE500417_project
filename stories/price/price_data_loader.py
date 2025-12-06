@@ -24,4 +24,7 @@ def get_combined_price_data():
     df = pd.merge(df, brent, on='year', how='left')
     df = pd.merge(df, gas, on='year', how='left')
 
+    df['oil_gas_production'] = df['oil production - TWh'] + df['gas production - TWh']
+    df['oil_gas_consumption'] = df['oil consumption - TWh'] + df['gas consumption - TWh']
+
     return df

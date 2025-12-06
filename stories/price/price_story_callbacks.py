@@ -21,6 +21,28 @@ def register_price_story_callbacks():
             return None
         
 
+
+
+    def get_specific_column_name(selected_y, fuel_type):
+        mapping ={
+            'oil_gas_consumption': {
+                'oil': 'oil consumption - TWh',
+                'gas': 'gas consumption - TWh'
+            },
+            'oil_gas_production': {
+                'oil': 'oil production - TWh',
+                'gas': 'gas production - TWh'
+            },
+            'co2 - Mt': {
+                'oil': 'oil_co2 - Mt',
+                'gas': 'gas_co2 - Mt'
+            }
+        }
+
+        return mapping.get(selected_y, {}).get(fuel_type, None)
+
+        
+
     @callback(
         Output('oil-price-graph', 'figure'),
         Input('price-dropdown', 'value'),
@@ -35,7 +57,7 @@ def register_price_story_callbacks():
         
 
 
-        x_axis = 'Oil Price ($)'
+        x_axis = 'year'
         if isinstance(selected_country, str):
             selected_country = [selected_country]
 
@@ -44,14 +66,16 @@ def register_price_story_callbacks():
         dff = dff[(dff['year'] >= year_range[0]) & (dff['year'] <= year_range[1])]
 
         trendline_option = get_trendline_option(trendline_selection)
+        y_axis_column = get_specific_column_name(y_axis, 'oil')
 
         fig = px.scatter(
             dff,
             x=x_axis,
-            y=y_axis,
-            color='country',
+            y=y_axis_column,
+            color='Oil Price ($)',
             trendline=trendline_option,
-            title='Oil Price vs Emissions',
+            title=f'Oil Price vs {y_axis}',
+            range_x=[year_range[0], year_range[1]]
         )
         fig.update_layout(transition_duration=500)
         return fig
@@ -72,7 +96,7 @@ def register_price_story_callbacks():
             return px.scatter(title="Please select at least one country and a Y-axis option.")
 
 
-        x_axis = 'Gas Price ($)'
+        x_axis = 'year'
         if isinstance(selected_country, str):
             selected_country = [selected_country]
 
@@ -81,14 +105,17 @@ def register_price_story_callbacks():
         dff = dff[(dff['year'] >= year_range[0]) & (dff['year'] <= year_range[1])]
 
         trendline_option = get_trendline_option(trendline_selection)
+        range_x = [year_range[0], year_range[1]]
+        y_axis_column = get_specific_column_name(y_axis, 'gas')
 
         fig = px.scatter(
             dff,
             x=x_axis,
-            y=y_axis,
-            color='country',
+            y=y_axis_column,
+            color='Gas Price ($)',
             trendline=trendline_option,
-            title='Gas Price vs Emissions',
+            title=f'Gas Price vs {y_axis}',
+            range_x=range_x
         )
         fig.update_layout(transition_duration=500)
         return fig

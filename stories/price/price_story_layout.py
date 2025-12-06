@@ -14,7 +14,6 @@ def create_price_story_layout():
             html.Div(
                 className="controls-container",
                 
-                style={'display': 'flex', 'gap': '30px', 'margin-bottom': '20px'},
                 children=[
                     
                     
@@ -23,7 +22,7 @@ def create_price_story_layout():
                         dcc.Dropdown(
                             id='price-dropdown',
                             options=[{'label': c, 'value': c} for c in price_df['country'].unique()],
-                            value=['Germany', 'Italy','Japan'], 
+                            value='Germany', 
                             multi=True,
                             clearable=False
                         ),
@@ -36,9 +35,11 @@ def create_price_story_layout():
                         dcc.Dropdown(
                             id='price-dropdown-select-y',
                             options=[
-                                {'label': 'CO2 Emissions', 'value': 'co2 - Mt'}
+                                {'label': 'CO2 Emissions', 'value': 'co2 - Mt'},
+                                {"label": "Oil and Gas Production", "value": "oil_gas_production"},
+                                {"label": "Oil and Gas Consumption", "value": "oil_gas_consumption"}
                             ],
-                            value='co2 - Mt', 
+                            value='oil_gas_consumption', 
                             clearable=False
                         ),
                     ]), 
@@ -72,9 +73,9 @@ def create_price_story_layout():
                     
                     html.Div(
                         className="graph-container",
-                        style={'width': '45%'},
+                        style={'width': '100%'},
                         children=[
-                            html.H3("Oil Price ($) vs CO2 Emissions"),
+                            html.H3("Oil Price Analysis"),
                             dcc.Graph(id='oil-price-graph')
                         ]
                     ),
@@ -82,9 +83,9 @@ def create_price_story_layout():
                     
                     html.Div(
                         className="graph-container",
-                        style={'width': '45%'},
+                        style={'width': '100%'},
                         children=[
-                            html.H3("Gas Price ($) vs CO2 Emissions"),
+                            html.H3("Gas Price Analysis"),
                             dcc.Graph(id='gas-price-graph')
                         ]
                     )
@@ -105,6 +106,20 @@ def create_price_story_layout():
                     )
                 ],
                 style={'margin-top': '30px', 'margin-left': '5px', 'margin-right': '5px'}
+            ),
+
+            html.Div(
+                style={'marginTop': '40px', 'padding': '20px', 'backgroundColor': '#f9f9f9', 'borderRadius': '5px'},
+                children=[
+                    html.H1("Observations", style={"fontWeight": "bold", "marginBottom": "10px"}),
+                    html.P(
+                        "We can see that when energy prices are high (yellow dots), most countries consume less oil and gas. "
+                        "However, for countries that produce oil, like Norway, this is different. "
+                        "High prices often lead to more production instead of less consumption.",
+                        style={"fontSize": "16px", "lineHeight": "1.5"}
+                    )
+                ]
             )
         ]
     )
+
