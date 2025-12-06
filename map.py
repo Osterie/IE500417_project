@@ -1,4 +1,4 @@
-from data_store import processed_data
+from data_store import processed_data_only_countries
 
 import pandas as pd
 from dash import Dash, html, dcc, callback, Output, Input
@@ -8,7 +8,7 @@ def create_ghg_layout():
 
 
     # Get preprocessed data
-    data = processed_data
+    data = processed_data_only_countries
 
  
     # We use just the columns that we need for the map. 
@@ -51,7 +51,8 @@ def create_ghg_layout():
 )
 def update_map(selected_year):
     year_to_show = int(selected_year[1])
-    filtered_df = processed_data[processed_data['year'] == year_to_show].copy()
+    filtered_df = processed_data_only_countries[processed_data_only_countries['year'] == year_to_show].copy()
+    
     fig = px.choropleth(
         filtered_df,
         locations="country",
