@@ -1,9 +1,7 @@
 from dash import html, dcc
 from stories.un_goals.un_controls import create_un_prediction_controls
 from data_store import processed_data
-from components.home_main_layout import (
-    create_rolling_average_selection,
-)
+
 
 
 def create_un_story_layout():
@@ -27,17 +25,11 @@ def create_un_story_layout():
                         html.Label("Select countries/regions:"),
                         dcc.Dropdown(
                             options=sorted(processed_data["country"].dropna().unique()),
-                            value=["Germany", "Australia", "Italy", "Spain"],
+                            value=["Germany", "Netherlands", "Italy", "Spain"],
                             id="un-dropdown-selection",
                             multi=True,
                         ),
                     ]),
-
-                    # Rolling average toggle + window
-                    create_rolling_average_selection(
-                        "un-show-rolling-average",
-                        "un-rolling-window-size",
-                    ),
 
                     # Prediction controls (enable + model dropdown + degree slider)
                     create_un_prediction_controls(

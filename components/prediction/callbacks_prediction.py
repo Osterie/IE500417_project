@@ -67,9 +67,10 @@ def add_prediction(
     countries,
     x_attr,
     y_attr,
-    year_range,      # keep param to avoid refactor pain
+    year_range,
     model_type,
     poly_degree=None,
+    color_map=None,
 ):
     base_styles = {
         "polynomial":    dict(dash="dot",      width=2),
@@ -96,7 +97,6 @@ def add_prediction(
             continue
 
         # Ensure x is numeric for non-year attributes
-        # (if x_attr is categorical, prediction will not be meaningful)
         try:
             x = df_c[x_attr].astype(float).values.reshape(-1, 1)
         except Exception:
@@ -110,11 +110,15 @@ def add_prediction(
             continue
 
         style = base_styles.get(model_type, base_styles["fallback"]).copy()
-        base_color = _get_country_color(fig, c)
-        if base_color is not None:
-            style["color"] = base_color
 
-        # ----------------- MODELS -----------------
+        if color_map and c in color_map:
+            style["color"] = color_map[c]
+        else:
+            base_color = _get_country_color(fig, c)
+            if base_color is not None:
+                style["color"] = base_color
+
+        # Models
 
         if model_type == "polynomial":
             try:
@@ -197,7 +201,7 @@ def add_prediction(
             y_pred = _fit_polynomial(x, y, x_pred, degree=1)
             line_label = f"{c} Linear"
 
-        # ----------------- TRACE -----------------
+        # Trace
         fig.add_trace(
             go.Scatter(
                 x=x_pred.flatten(),

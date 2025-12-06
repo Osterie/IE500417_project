@@ -77,7 +77,7 @@ def do_rolling_average(show_rolling, rolling_window, countries, dff, fig, y_attr
             )
     return fig
 
-def do_prediction(prediction_mode, model_selection, processed_data, countries, x_attr, y_attr, year_range, poly_degree, fig):
+def do_prediction(prediction_mode, model_selection, processed_data, countries, x_attr, y_attr, year_range, poly_degree, fig, color_map=None, ):
     if prediction_mode and "predict" in (prediction_mode or []):
         if not model_selection:
             selected_models = []
@@ -96,6 +96,7 @@ def do_prediction(prediction_mode, model_selection, processed_data, countries, x
                 year_range,
                 model_type, 
                 poly_degree=poly_degree,
+                color_map=color_map,
             )
     return fig
 

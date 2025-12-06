@@ -11,7 +11,6 @@ from util import (
     get_data_for_countries,
     get_data_in_year_range,
     extract_existing_colors,
-    do_rolling_average,
     do_prediction,
     
 )
@@ -65,7 +64,7 @@ def register_un_story_callbacks(processed_data):
 
         return fig
 
-    def add_un_markers(fig, prediction_mode):
+    def add_un_markers(fig, prediction_mode, year_range):
         fig = go.Figure(fig)
 
         prediction_on = bool(prediction_mode and "predict" in prediction_mode)
@@ -73,12 +72,17 @@ def register_un_story_callbacks(processed_data):
         markers = [
             (UN_GOALS["Rio_earth_summit"], "Rio Earth Summit", False),
             (UN_GOALS["paris_agreement_year"], "Paris Agreement", False),
-            (UN_GOALS["cut_ghg_by_43%"], "cut ghg by 43%", False),
+            (UN_GOALS["cut_ghg_by_43%"], "cut ghg by 43%", True),
             (UN_GOALS["net_zero_year"], "Net-zero 2050", True),
         ]
 
+        start, end = year_range
+
         for year, label, only_with_prediction in markers:
             if only_with_prediction and not prediction_on:
+                continue
+
+            if year < start or year > end:
                 continue
 
             fig.add_vline(
@@ -90,15 +94,17 @@ def register_un_story_callbacks(processed_data):
             )
             fig.add_annotation(
                 x=year,
-                y=1,
+                y=-0.03,
                 xref="x",
                 yref="paper",
                 text=label,
                 showarrow=False,
                 yanchor="bottom",
-                textangle=-90,
+                textangle=0,
+                yshift=-18,
                 font=dict(size=10, color="grey"),
             )
+        fig.update_layout(margin=dict(b=90))
 
         return fig
 
@@ -111,8 +117,6 @@ def register_un_story_callbacks(processed_data):
         Output("un-goals-indicator", "children"),
         Input("un-dropdown-selection", "value"),
         Input("un-year-range-slider", "value"),
-        Input("un-show-rolling-average", "value"),
-        Input("un-rolling-window-size", "value"),
         Input("un-enable-prediction", "value"),
         Input("un-model-selection", "value"),
         Input("un-polynomial-degree", "value"),
@@ -121,8 +125,6 @@ def register_un_story_callbacks(processed_data):
     def update_un_graph(
         countries,
         year_range,
-        show_rolling,
-        rolling_window,
         prediction_mode,
         model_selection,
         poly_degree,
@@ -157,14 +159,7 @@ def register_un_story_callbacks(processed_data):
         fig = create_line_chart(dff, x_attr, y_attr, color_map=final_color_map)
 
 
-        fig = do_rolling_average(
-            show_rolling,
-            rolling_window,
-            countries,
-            dff,
-            fig,
-            y_attr,
-        )
+
 
         fig = do_prediction(
             prediction_mode,
@@ -176,9 +171,10 @@ def register_un_story_callbacks(processed_data):
             year_range,
             poly_degree,
             fig,
+            
         )
 
-        fig = add_un_markers(fig, prediction_mode)
+        fig = add_un_markers(fig, prediction_mode, year_range)
 
         fig.update_layout(
             template="plotly_white",
@@ -269,8 +265,6 @@ def register_un_story_callbacks(processed_data):
         Output("un-cons-graph", "figure"),
         Input("un-dropdown-selection", "value"),
         Input("un-year-range-slider", "value"),
-        Input("un-show-rolling-average", "value"),
-        Input("un-rolling-window-size", "value"),
         Input("un-enable-prediction", "value"),
         Input("un-model-selection", "value"),
         Input("un-polynomial-degree", "value"),
@@ -279,8 +273,6 @@ def register_un_story_callbacks(processed_data):
     def update_prod_cons_graphs(
         countries,
         year_range,
-        show_rolling,
-        rolling_window,
         prediction_mode,
         model_selection,
         poly_degree,
@@ -345,23 +337,7 @@ def register_un_story_callbacks(processed_data):
                     )
                 )
 
-        # Rolling average for production
-        prod_fig = do_rolling_average(
-            show_rolling,
-            rolling_window,
-            countries,
-            dff,
-            prod_fig,
-            oil_prod_col,
-        )
-        prod_fig = do_rolling_average(
-            show_rolling,
-            rolling_window,
-            countries,
-            dff,
-            prod_fig,
-            gas_prod_col,
-        )
+
 
         # Prediction for production
         if prediction_mode and "predict" in prediction_mode:
@@ -377,9 +353,10 @@ def register_un_story_callbacks(processed_data):
                     year_range,
                     poly_degree,
                     prod_fig,
+                    color_map=final_color_map,
                 )
 
-        prod_fig = add_un_markers(prod_fig, prediction_mode)
+        prod_fig = add_un_markers(prod_fig, prediction_mode, year_range)
 
         prod_fig.update_layout(
             template="plotly_white",
@@ -432,24 +409,6 @@ def register_un_story_callbacks(processed_data):
                     )
                 )
 
-        # Rolling average for consumption
-        cons_fig = do_rolling_average(
-            show_rolling,
-            rolling_window,
-            countries,
-            dff,
-            cons_fig,
-            oil_cons_col,
-        )
-        cons_fig = do_rolling_average(
-            show_rolling,
-            rolling_window,
-            countries,
-            dff,
-            cons_fig,
-            gas_cons_col,
-        )
-
         # Prediction for consumption
         if prediction_mode and "predict" in prediction_mode:
             x_attr = "year"
@@ -464,9 +423,10 @@ def register_un_story_callbacks(processed_data):
                     year_range,
                     poly_degree,
                     cons_fig,
+                    color_map=final_color_map,
                 )
 
-        cons_fig = add_un_markers(cons_fig, prediction_mode)
+        cons_fig = add_un_markers(cons_fig, prediction_mode, year_range)
 
         cons_fig.update_layout(
             template="plotly_white",

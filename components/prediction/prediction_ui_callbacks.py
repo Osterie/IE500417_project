@@ -7,7 +7,7 @@ def register_prediction_ui_callbacks(processed_data):
         Output("year-range-slider", "max", allow_duplicate=True),
         Output("year-range-slider", "value", allow_duplicate=True),
         Input("enable-prediction", "value"),
-        Input("dropdown-selection-x", "value"),   # ✅ new
+        Input("dropdown-selection-x", "value"), 
         State("year-range-slider", "value"),
         prevent_initial_call="initial_duplicate",
     )
