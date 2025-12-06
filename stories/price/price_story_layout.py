@@ -1,11 +1,8 @@
 from dash import html, dcc
-from map import create_ghg_layout
-from components.stacked_chart import create_stacked_chart_layout
 from components.home_main_layout import (
     create_country_selection,
     create_x_axis_selection,
     create_y_axis_selection,
-    create_rolling_average_selection,
     create_prediction_controls,
 )
 

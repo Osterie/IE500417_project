@@ -116,7 +116,7 @@ def register_price_story_callbacks(processed_data):
     def apply_story_mode_defaults(selected_story_mode):
         if selected_story_mode == "Oil dependent countries":
             return (
-                ["Germany", "Italy", "Russia", "United Kingdom"],
+                ["Germany", "Italy", "United Kingdom"],
                 "Oil Price ($)",
                 "oil consumption - TWh",
             )
