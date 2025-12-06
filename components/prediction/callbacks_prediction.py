@@ -4,9 +4,9 @@ import plotly.graph_objects as go
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.ensemble import RandomForestRegressor
+from statsmodels.nonparametric.smoothers_lowess import lowess
 
 try:
-    from statsmodels.nonparametric.smoothers_lowess import lowess
     _HAS_LOWESS = True
 except ImportError:
     _HAS_LOWESS = False
