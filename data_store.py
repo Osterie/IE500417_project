@@ -1,6 +1,6 @@
 import pandas as pd
 from data_reading import create_oil_production_dataset_countries, preprocess_data, include_only_countries
-from data_reading import create_oil_gas_production_dataset
+from data_reading import create_oil_gas_production_dataset, create_oil_gas_production_dataset2, create_oil_gas_consumption_dataset, create_oil_gas_consumption_dataset2
 
 
 try:
@@ -16,9 +16,13 @@ try:
     oil_production_data = pd.read_csv('data/total_oil_production.csv')
 except FileNotFoundError:
     oil_production_data = create_oil_gas_production_dataset(processed_data)
+    gas_production_data = create_oil_gas_production_dataset2(processed_data)
+    oil_consumption_data = create_oil_gas_consumption_dataset(processed_data)
+    gas_consumption_data = create_oil_gas_consumption_dataset2(processed_data)
     oil_production_data.to_csv('data/total_oil_production.csv', index=False)
-
-
+    gas_production_data.to_csv('data/total_gas_production.csv', index=False)
+    oil_consumption_data.to_csv('data/total_oil_consumption.csv', index=False)
+    gas_consumption_data.to_csv('data/total_gas_consumption.csv', index=False)
 
 
 

@@ -21,13 +21,16 @@ from components.layout import create_layout
 
 app.layout = create_layout()
 
+price_df = get_combined_price_data()
+
+
 register_graph_callbacks(processed_data)
 register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
 register_prediction_ui_callbacks(processed_data)
 register_stacked_chart_callbacks(processed_data)
 register_war_story_callbacks(processed_data)
-register_price_story_callbacks()
+register_price_story_callbacks(price_df)
 register_un_story_callbacks(processed_data)
 
 app.processed_data = processed_data

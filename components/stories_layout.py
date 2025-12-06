@@ -2,6 +2,10 @@ from dash import html, dcc, Input, Output, callback
 from stories.war.war_story_layout import create_war_story_layout
 from stories.price.price_story_layout import create_price_story_layout
 from stories.un_goals.un_goals_layout import create_un_story_layout
+from stories.price.price_data_loader import get_combined_price_data
+
+price_df = get_combined_price_data()
+
 
 def create_stories_layout():
     return html.Div(
@@ -25,4 +29,4 @@ def update_output(selected_story):
         return create_un_story_layout()
     
     elif selected_story == 'Do fluctuations in oil and gas prices affect CO2 emissions?':
-        return create_price_story_layout()
+        return create_price_story_layout(price_df)
