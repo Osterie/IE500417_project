@@ -53,4 +53,4 @@ def create_price_story_layout(processed_data):
     )
 
 def create_price_title():
-    return html.H1("Price title", style={"textAlign": "center"})
+    return html.H1("Correlation between oil and gas prices with consumption and production", style={"textAlign": "center"})
