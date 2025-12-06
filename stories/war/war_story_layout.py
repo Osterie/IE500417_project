@@ -37,7 +37,10 @@ def create_war_story_layout():
     return html.Div(
         id="war-story-container",
         children=[
+            html.P("Further down you can choose a story mode, and even further down you can view that story.", style={'margin-bottom': '60px'}),
             html.Hr(),
+            
+            
             
             html.H2("Story mode", style={"textAlign": "center"}),
 

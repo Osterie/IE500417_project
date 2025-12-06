@@ -9,7 +9,6 @@ def create_stories_layout():
         children= [
             html.H1('Please select a story:'),
             dcc.Dropdown(['How does war affect the oil and gas industry?', 'EU\'s progression towards UN sustainability goals', 'Do fluctuations in oil and gas prices affect CO2 emissions?'], 'How does war affect the oil and gas industry?', id='story-dropdown'),
-            html.P("Further down you can choose a story mode, and even further down you can view that story.", style={'margin-bottom': '60px'}),
             html.Div(id='story-area')
         ]
     )
