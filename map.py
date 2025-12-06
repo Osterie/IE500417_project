@@ -1,5 +1,5 @@
 from data_store import processed_data_only_countries
-from dash import html, dcc, callback, Output, Input
+from dash import html, dcc, callback, Output, Input, State
 import plotly.express as px
 from dash.exceptions import PreventUpdate
 
@@ -23,7 +23,18 @@ def create_ghg_layout():
                 marks=None,
                 step=1,
                 tooltip={"placement": "bottom", "always_visible": True},
-            )
+            ),
+            
+            html.Button("Play", id="play-button", n_clicks=0),
+
+            dcc.Interval(
+                id='interval-component',
+                interval=200,
+                n_intervals=0,
+                disabled=True
+            ),
+            dcc.Store(id="is-playing", data=False),
+
         ])
     ])
     return layout
@@ -65,6 +76,43 @@ def update_map(selected_year, y_attr):
             landcolor="white",
             showcountries=True,
             countrycolor="Black"
-        )
+        ),
+        uirevision='keep-zoom'
     )
     return fig
+
+
+@callback(
+    Output("is-playing", "data"),
+    Output("play-button", "children"),
+    Input("play-button", "n_clicks"),
+    State("is-playing", "data")
+)
+def toggle_play(n_clicks, is_playing):
+    if n_clicks == 0:
+        return False, "Play"
+    return not is_playing, "Pause" if not is_playing else "Play"
+
+@callback(
+    Output("interval-component", "disabled"),
+    Input("is-playing", "data")
+)
+def enable_interval(is_playing):
+    return not is_playing
+
+
+@callback(
+    Output("year-slider", "value"),
+    Input("interval-component", "n_intervals"),
+    State("year-slider", "value"),
+    State("year-slider", "max"),
+    State("is-playing", "data")
+)
+def advance_year(n_intervals, current_value, slider_max, is_playing):
+    if not is_playing:
+        return current_value
+    
+    if current_value >= slider_max:
+        return slider_max
+
+    return current_value + 1
