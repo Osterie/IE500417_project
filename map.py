@@ -2,6 +2,7 @@ from data_store import processed_data_only_countries
 from dash import html, dcc, callback, Output, Input, State
 import plotly.express as px
 from dash.exceptions import PreventUpdate
+import numpy as np
 
 def create_ghg_layout():
 
@@ -10,6 +11,19 @@ def create_ghg_layout():
 
     layout = html.Div([
         html.H1(id ='map-title', children='Y-axis attribute visualized', style={'textAlign':'center'}),
+        
+        html.Div([
+            html.H2("Color Scale:"),
+            dcc.RadioItems(
+                id="scale-type",
+                options=[
+                    {"label": "Linear", "value": "linear"},
+                    {"label": "Logarithmic", "value": "log"}
+                ],
+                value="linear",
+                inline=True
+            )
+        ]),
 
         dcc.Graph(id='ghg-map'),
 
@@ -52,24 +66,50 @@ def update_map_title(y_attr):
 @callback(
     Output('ghg-map', 'figure'),
     Input('year-slider', 'value'),
-    Input('dropdown-selection-y', 'value')
+    Input('dropdown-selection-y', 'value'),
+    Input('scale-type', 'value'),
 )
-def update_map(selected_year, y_attr):
+def update_map(selected_year, y_attr, scale_type):
 
     if (y_attr is None) or (y_attr in ["country", "year"]):
         raise PreventUpdate
     
     filtered_df = processed_data_only_countries[processed_data_only_countries['year'] == selected_year].copy()
+    filtered_df = filtered_df[filtered_df[y_attr] > 0]
+    
+    if scale_type == "log":
+        filtered_df['log_color'] = np.log10(filtered_df[y_attr])
+        color_col = 'log_color'
+
+        cmin = filtered_df['log_color'].min()
+        cmax = filtered_df['log_color'].max()
+        tickvals = np.linspace(cmin, cmax, num=5)
+        ticktext = [f"{int(10**v):,}" for v in tickvals]
+
+        colorbar_dict = dict(
+            title=y_attr,
+            tickvals=tickvals,
+            ticktext=ticktext
+        )
+    else:
+        color_col = y_attr
+        colorbar_dict = dict(title=y_attr)
 
     fig = px.choropleth(
         filtered_df,
         locations="country",
         locationmode='country names',
-        color=y_attr,
-        hover_name="country",
-        projection="natural earth",
-        title=f"{y_attr} in {selected_year}",
+        color=color_col,
+        hover_name='country',
+        projection='natural earth',
+        title=f"{y_attr} ({scale_type} scale) in {selected_year}",
     )
+
+    fig.update_traces(
+        customdata=filtered_df[y_attr],
+        hovertemplate="%{hovertext}<br>Value: %{customdata}"
+    )
+
     fig.update_layout(
         geo=dict(
             showland=True,
@@ -77,8 +117,10 @@ def update_map(selected_year, y_attr):
             showcountries=True,
             countrycolor="Black"
         ),
-        uirevision='keep-zoom'
+        uirevision='keep-zoom',
+        coloraxis_colorbar=colorbar_dict
     )
+
     return fig
 
 
