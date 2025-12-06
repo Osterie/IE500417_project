@@ -67,8 +67,8 @@ def create_price_story_layout():
             
             
             html.Div(
-                className="graph-view-container",
-                style={'margin-top': '20px'},
+                className="graph-view-container",             
+                style={'margin-top': '80px'},
                 children=[
                     
                     html.Div(

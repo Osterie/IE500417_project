@@ -64,6 +64,7 @@ def create_un_story_layout():
             # Main un graph
             html.Div(
                 className="graph-card",
+                style={"marginBottom": "80px"},
                 children=[
                     dcc.Graph(id="un-graph-content"),
                     html.Div(
@@ -83,6 +84,7 @@ def create_un_story_layout():
             # Production graph
             html.Div(
                 className="graph-card",
+                style={"marginBottom": "80px"},
                 children=[
                     dcc.Graph(id="un-prod-graph"),
                     html.Div(
@@ -102,6 +104,7 @@ def create_un_story_layout():
             # Consumption graph
             html.Div(
                 className="graph-card",
+                style={"marginBottom": "80px"},                
                 children=[
                     dcc.Graph(id="un-cons-graph"),
                     html.Div(
