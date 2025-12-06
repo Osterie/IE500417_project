@@ -56,6 +56,13 @@ def preprocess_data():
             
     return final_dataframe
 
+def include_only_countries(data):
+    data_with_codes = pd.read_csv(FilePaths.CO2.value)
+    countries_without_codes = data_with_codes[data_with_codes['iso_code'].isnull()]['country'].unique()
+    
+    no_country_code = data[~data['country'].isin(countries_without_codes)].copy()
+    return no_country_code
+
 def read_data(path, relevant_attributes = []):
     data = pd.read_csv(path)
     if (relevant_attributes != []):

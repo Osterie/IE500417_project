@@ -1,12 +1,15 @@
 import pandas as pd
-from data_reading import create_oil_production_dataset_countries, preprocess_data
+from data_reading import create_oil_production_dataset_countries, preprocess_data, include_only_countries
 from data_reading import create_oil_gas_production_dataset
 
 
 try:
     processed_data = pd.read_csv('data/processed_data.csv')
+    processed_data_only_countries = pd.read_csv('data/processed_data_only_countries.csv')
 except FileNotFoundError:
     processed_data = preprocess_data()
+    processed_data_only_countries = include_only_countries(processed_data)
+    processed_data_only_countries.to_csv('data/processed_data_only_countries.csv', index=False)
     processed_data.to_csv('data/processed_data.csv', index=False)
 
 try:
