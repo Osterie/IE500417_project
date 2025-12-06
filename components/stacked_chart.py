@@ -26,7 +26,7 @@ def create_stacked_chart_layout(processed_data):
                 style={"width": "450px", "marginBottom": "15px"},
             ),
 
-            dcc.Graph(id="stacked-chart-graph"),
+            dcc.Graph(id="stacked-chart-graph", style={"marginBottom": "80px"}),
         ],
     )
 

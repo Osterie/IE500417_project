@@ -57,7 +57,7 @@ def create_main_layout(processed_data):
 
             html.Div(
                 id="correlation-output",
-                style={"fontSize": "18px", "textAlign": "center", "marginTop": "10px"}
+                style={"fontSize": "18px", "textAlign": "center", "marginTop": "10px", "marginBottom": "80px"}
             ),
             
             create_stacked_chart_layout(processed_data),
