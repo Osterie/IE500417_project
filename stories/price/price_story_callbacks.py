@@ -80,28 +80,31 @@ def register_price_story_callbacks(processed_data):
         else:
             return {"display": "none"}
 
-    # @callback(
-    #     Output('price-selected-story-mode', 'children'),
-    #     Output('price-selected-story-description', 'children'),
-    #     Input("price-story-selector", "value")
-    # )
-    # def update_story_mode_label(selected_story_mode):
-    #     if selected_story_mode == "Self-Exploration":
-    #         story_mode_explanation = "You have chosen the story mode: Self-Exploration. Enjoy exploring the data on your own!"
-    #         story_mode_description = "For this exploration mode there is no predefined story. Feel free to select different countries, attributes, wars and time ranges to discover insights on your own."
-    #         return story_mode_explanation, story_mode_description
-    #     elif selected_story_mode == "Global Conflicts":
-    #         story_mode_explanation = "You have chosen the story mode: Global Conflicts. Explore the impact of global conflicts on the oil and gas industry."
-    #         story_mode_description = "As you can see on the graph, there is a large dip in the worlds oil production when the Soviet-Afghan price and Iran-Iraq price started, around 1979. Interestingly we do not see a notable dip in oil production during any of the other wars we have included. Infact, during the period of the Vitenam price (from when USA got involved), we see a huge increase in oil production globally. This could be due to various factors such as increased demand for oil to support the price effort, or perhaps other geopolitical factors at play during that time. We can see that in 1965, at the start of USA's involvement in the price, the global production of oil was around 18 000 TWh, whilst 10 years later, in 1975, the production price around 32 000 TWh. This is about a 78% increase in production over a decade."
-    #         return story_mode_explanation, story_mode_description
-    #     elif selected_story_mode == "Iraq Wars":
-    #         story_mode_explanation = "You have chosen the story mode: Iraq Wars. Analyze the effects of the wars in Iraq on its oil and gas industry."
-    #         story_mode_description = "We can observe significant decreases in Iraq's oil production during the periods of the Iran-Iraq War and Gulf War, and also a clear dip the year the Iraq War 2003 started. Interestingly we also see that the years leading up to the wars show an increase in production, possibly indicating efforts to maximize output before the anticipated conflicts. Overall, these wars had a profound impact on Iraq's oil production."
-    #         story_mode_description += "\n"
-    #         story_mode_description += "We can also observe that oil production steadily increases during each price, and that after the price ends, production quickly recovers and continues to grow. This could indicate that the oil infrastructure was not heavily damaged during these conflicts, or that there were rapid reconstruction efforts post-price to restore production levels, perhaps since oil is such a crucial part of Iraq's economy."
-    #         return story_mode_explanation, story_mode_description
-    #     else:
-    #         return "Unknown Mode", ""
+    @callback(
+        Output('price-selected-story-mode', 'children'),
+        Output('price-selected-story-description', 'children'),
+        Input("price-story-selector", "value")
+    )
+    def update_story_mode_label(selected_story_mode):
+        story_mode_explanation = "Unknown Mode"
+        story_mode_description = ""
+        if selected_story_mode == "Oil dependent countries":
+            story_mode_explanation = "You are viewing a story about some countries with high Oil consumption in Europe"
+            story_mode_description = "DESCRIPTION HERE"
+        
+        elif selected_story_mode == "Gas dependent countries":
+            story_mode_explanation = "You are viewing a story about some countries with high Gas consumption in Europe"
+            story_mode_description = ""
+        
+        elif selected_story_mode == "Oil producing countries":
+            story_mode_explanation = "You are viewing a story about some countries with high Oil production in Europe"
+            story_mode_description = ""
+        
+        elif selected_story_mode == "Gas producing countries":
+            story_mode_explanation = "You are viewing a story about some countries with high Oil consumption in Europe"
+            story_mode_description = ""
+
+        return story_mode_explanation, story_mode_description
         
     @callback(
         Output("price-dropdown-selection", "value", allow_duplicate=True),
@@ -113,31 +116,29 @@ def register_price_story_callbacks(processed_data):
     def apply_story_mode_defaults(selected_story_mode):
         if selected_story_mode == "Oil dependent countries":
             return (
-                # ["Germany", "Italy", "Spain"],
                 ["Germany", "Italy", "Russia", "United Kingdom"],
                 "Oil Price ($)",
-                "co2 - Mt",
+                "oil consumption - TWh",
             )
             
         elif selected_story_mode == "Gas dependent countries":
             return (
                 ["Germany", "United Kingdom", "Italy", "Ukraine"],
-                # ["Germany", "Italy", "United Kingdom", "Netherlands"],
-                "Oil Price ($)",
-                "co2 - Mt",
+                "Gas Price ($)",
+                "gas consumption - TWh",
             )
 
         elif selected_story_mode == "Oil producing countries":
             return (
-                ["Russia", "Norway", "United Kingdom", "Romania"],
+                ["Norway", "United Kingdom"],
                 "Oil Price ($)",
-                "co2 - Mt",
+                "oil production - TWh",
             )
         elif selected_story_mode == "Gas producing countries":
             return (
                 ["Norway", "United Kingdom", "Romania", "Ukraine"],
-                "Oil Price ($)",
-                "co2 - Mt",
+                "Gas Price ($)",
+                "gas production - TWh",
             )
 
         raise PreventUpdate

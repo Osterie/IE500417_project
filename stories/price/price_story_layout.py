@@ -28,6 +28,10 @@ def create_price_story_layout(processed_data):
             ),
 
             html.Hr(),
+            
+            html.Div(id='price-selected-story-mode', style={"fontWeight": "bold", "marginBottom": "200px"}),
+
+            
             create_price_title(),
             html.Div(
                 className="control-grid",
@@ -45,6 +49,9 @@ def create_price_story_layout(processed_data):
                     dcc.Graph(id='price-graph-content')
                 ]
             ),
+            
+            html.H1("Observations", id='price-selected-story-description-title', style={"fontWeight": "bold", "marginBottom": "20px"}),
+            html.P(id='price-selected-story-description', style={"fontWeight": "bold"}),
         ]
     )
 
