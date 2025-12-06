@@ -60,7 +60,7 @@ def create_main_layout(processed_data):
                 style={"fontSize": "18px", "textAlign": "center", "marginTop": "10px"}
             ),
             
-            # create_stacked_chart_layout(),
+            create_stacked_chart_layout(processed_data),
         ]
     )
 
