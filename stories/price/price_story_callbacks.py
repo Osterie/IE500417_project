@@ -94,15 +94,15 @@ def register_price_story_callbacks(processed_data):
         
         elif selected_story_mode == "Gas dependent countries":
             story_mode_explanation = "You are viewing a story about some countries with high Gas consumption in Europe"
-            story_mode_description = "We excpected that when gas prices rise, the consumption would also rise. This was not the case for every country, this could be because of external unknown causes."
+            story_mode_description = "We expected that when gas prices rise, the consumption would also rise. Since higher demand leads to higher prices. This seems to be the case based on the trend we can see on the graph. There are however many other factors which may affect gas consumption, so we can't definitely say the price of gas is the biggest factor."
         
         elif selected_story_mode == "Oil producing countries":
             story_mode_explanation = "You are viewing a story about some countries with high Oil production in Europe"
-            story_mode_description = "We can see that for the selected countries, oil production generally rises when oil prices rise. This can be because of when these or other countries need more oil, they are willing to pay more for it, also known as supply and demand."
+            story_mode_description = "We can see that for the selected countries, oil production is decreased for the United Kingdom, and pretty much the same for Norway. This tells us that there is perhaps not a huge correlation between the price of oil and the production of oil. There might be other factors which affect oil production much more."
         
         elif selected_story_mode == "Gas producing countries":
             story_mode_explanation = "You are viewing a story about some countries with high Oil consumption in Europe"
-            story_mode_description = "We can see that for the selected countries, gas production generally rises or stays still when prices rise. This can be becuase of supply and demand, and for the countries that the price does not change, they might produce a set amount of gas per year."
+            story_mode_description = "We can see that for the selected countries, gas production generally rises or stays still when prices rise. This can be becuase of supply and demand, and for the countries that the price does not change, they might not be able to increase their production a lot to take advantage of higher prices, or maybe there isn't a big correlation."
 
         return story_mode_explanation, story_mode_description
         
