@@ -16,11 +16,11 @@ def create_stacked_chart_layout(processed_data):
         children=[
             html.H2("Stacked Summary for Selected Countries & Time Range", style={"textAlign": "center"}),
 
-            html.Label("Stacked attributes (auto-adds main Y):"),
+            html.Label("Stacked attributes:"),
             dcc.Dropdown(
                 id="stacked-attr-selection",
                 options=[{"label": a, "value": a} for a in attr_options],
-                value=[], 
+                value=["gas production - TWh", "oil production - TWh"], 
                 multi=True,
                 placeholder="Pick one or more attributes...",
                 style={"width": "450px", "marginBottom": "15px"},
@@ -55,9 +55,7 @@ def register_stacked_chart_callbacks(processed_data):
         # Always remove invalids if they got in
         selected_attrs = [a for a in selected_attrs if a not in INVALID]
 
-        auto_add_allowed = bool(main_y) and main_y not in INVALID
-        if auto_add_allowed and main_y not in selected_attrs:
-            selected_attrs = selected_attrs + [main_y]
+
 
         if not selected_attrs:
             fig = px.bar(title="Select one or more attributes to build a stacked summary.")
