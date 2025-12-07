@@ -11,9 +11,53 @@ from components.home_main_layout import (
 )
 
 def create_war_story_layout():
+    
+    x_axis_values = [
+        "year",
+    ]
+    
+    y_axis_values = [
+        "oil production - TWh",
+        "gas production - TWh",
+        "oil consumption - TWh",
+        "gas consumption - TWh",
+        "co2 - Mt",
+        "gas_co2 - Mt",
+        "oil_co2 - Mt",
+        "co2_growth_abs - Mt",
+        "co2_growth_prct - %",
+        "cumulative_oil_co2 - Mt",
+        "total_ghg - Mt"
+    ]
+    
+    
+    processed_data_x_axis = processed_data[x_axis_values]
+    processed_data_y_axis = processed_data[y_axis_values]
+    
     return html.Div(
         id="war-story-container",
         children=[
+            html.P("Further down you can choose a story mode, and even further down you can view that story.", style={'margin-bottom': '60px'}),
+            html.Hr(),
+            
+            
+            
+            html.H2("Story mode", style={"textAlign": "center"}),
+
+            html.Label("Select Story mode:"),
+            dcc.Dropdown(
+                id="war-story-selector",
+                options=["Self-Exploration", "Global Conflicts", "Iraq Wars"],
+                value="Self-Exploration",
+                placeholder="Choose a story mode…"
+            ),
+
+            html.Hr(),
+
+
+            html.Div(id='war-selected-story-mode', style={"fontWeight": "bold", "marginBottom": "200px"}),
+            
+            
             html.H2("How Wars Affect Oil & Gas", style={"textAlign": "center"}),
 
             html.Label("Select war(s):"),
@@ -24,14 +68,13 @@ def create_war_story_layout():
                 placeholder="Choose wars to overlay…"
             ),
 
-            html.Hr(),
 
             html.Div(
                 className="control-grid",
                 children=[
                     create_country_selection(processed_data, 'war-dropdown-selection', default_country='World'),
-                    create_x_axis_selection(processed_data, 'war-dropdown-selection-x', default_x='year'),
-                    create_y_axis_selection(processed_data, 'war-dropdown-selection-y', default_y='co2'),
+                    create_x_axis_selection(processed_data_x_axis, 'war-dropdown-selection-x', default_x='year'),
+                    create_y_axis_selection(processed_data_y_axis, 'war-dropdown-selection-y', default_y='oil production - TWh'),
                     create_rolling_average_selection('war-show-rolling-average', 'war-rolling-window-size'),
                     create_prediction_controls('war-model-selection-container', 'war-enable-prediction', 'war-model-selection', 'war-polynomial-degree')
                 ]
@@ -64,157 +107,8 @@ def create_war_story_layout():
                 ],
                 style={"display": "none"}
             ),
+            
+            html.H1("Observations", id='war-selected-story-description-title', style={"fontWeight": "bold", "marginBottom": "20px"}),
+            html.P(id='war-selected-story-description', style={"fontWeight": "bold"}),
         ]
     )
-    
-
-
-# def create_main_layout(processed_data):
-#     return html.Div(
-#         className="war-story",
-#         children=[
-#             create_title(),
-#             html.Div(
-#                 className="control-grid",
-#                 children=[
-#                     html.Div([
-#                         html.Label("Select a country/region:"),
-#                         dcc.Dropdown(
-#                             processed_data.country.unique(),
-#                             'Canada',
-#                             id='dropdown-selection',
-#                             multi=True
-#                         )
-#                     ]),
-#                     html.Div([
-#                         html.Label("X-axis attribute:"),
-#                         dcc.Dropdown(
-#                             processed_data.columns.values,
-#                             'year',
-#                             id='dropdown-selection-x'
-#                         )
-#                     ]),
-#                     html.Div([
-#                         html.Label("Y-axis attribute:"),
-#                         dcc.Dropdown(
-#                             processed_data.columns.values,
-#                             'co2',
-#                             id='dropdown-selection-y'
-#                         )
-#                     ]),
-#                     html.Div(id='rolling-average-container', children=[
-#                         dcc.Checklist(
-#                             id='show-rolling-average',
-#                             options=[{'label': 'Show Rolling Average', 'value': 'show'}],
-#                             value=[],
-#                             inline=True,
-#                             style={"marginTop": "10px"}
-#                         ),
-#                         html.Div([
-#                             html.Label("Rolling Average Window (years):"),
-#                             dcc.Input(
-#                                 id='rolling-window-size',
-#                                 type='number',
-#                                 min=1,
-#                                 max=20,
-#                                 step=1,
-#                                 value=3,
-#                                 style={"width": "60px", "marginLeft": "10px"}
-#                             )
-#                         ], style={"marginTop": "5px"})
-#                     ]),
-
-#                     html.Div(id='prediction-container', children=[
-#                         dcc.Checklist(
-#                             id='enable-prediction',
-#                             options=[{'label': 'Enable Prediction', 'value': 'predict'}],
-#                             value=[],
-#                             inline=True,
-#                             style={"marginTop": "15px"}
-#                         ),
-
-#                         html.Div(
-#                             id='model-selection-container',
-#                             children=[
-#                                 html.Label("Regression Model:"),
-#                                 dcc.Dropdown(
-#                                     options=[
-#                                         {"label": "Polynomial Regression", "value": "polynomial"},
-#                                         {"label": "Exponential", "value": "exponential"},
-#                                         {"label": "Logarithmic", "value": "logarithmic"},
-#                                         {"label": "Random Forest", "value": "random_forest"},
-#                                         {"label": "LOWESS Smoother", "value": "lowess"},
-#                                     ],
-#                                     value="polynomial",
-#                                     multi=True,
-#                                     id="model-selection"
-#                                 ),
-#                             ],
-#                             style={"display": "none"}
-#                         ),
-
-#                         html.Div(
-#                             id="polynomial-degree-container",
-#                             children=[
-#                                 html.Label("Polynomial Degree:"),
-#                                 dcc.Slider(
-#                                     id="polynomial-degree",
-#                                     min=1,
-#                                     max=8,
-#                                     step=1,
-#                                     value=2,
-#                                     marks={i: str(i) for i in range(1, 9)},
-#                                     tooltip={"placement": "bottom", "always_visible": False},
-#                                 )
-#                             ],
-#                             style={"display": "none", "marginTop": "10px"}
-#                         ),
-#                     ]),
-#                 ]
-#             ),
-
-#             html.Div(
-#                 className="graph-card",
-#                 children=[
-#                     dcc.Graph(id='graph-content')
-#                 ]
-#             ),
-
-#             html.Div(
-#                 id='slider-container',
-#                 children=[
-#                     html.Label("Select year range:"),
-#                     dcc.RangeSlider(
-#                         id='year-range-slider',
-#                         min=processed_data['year'].min(),
-#                         max=processed_data['year'].max(),
-#                         value=[
-#                             processed_data['year'].min(),
-#                             processed_data['year'].max()
-#                         ],
-#                         marks=None,
-#                         step=1,
-#                         allowCross=False,
-#                         tooltip={"placement": "bottom", "always_visible": True},
-#                     )
-#                 ],
-#                 style={"display": "none"}
-#             ),
-
-#             html.Button(
-#                 "Show Correlation",
-#                 id="correlation-button",
-#                 n_clicks=0,
-#                 style={"marginTop": "20px"}
-#             ),
-
-#             html.Div(
-#                 id="correlation-output",
-#                 style={"fontSize": "18px", "textAlign": "center", "marginTop": "10px"}
-#             )
-#         ]
-#     )
-    
-
-# def create_title():
-#     return html.H1("How does war affect oil and gas price/production/consumption?", style={"textAlign": "center"})

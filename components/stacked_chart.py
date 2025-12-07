@@ -4,146 +4,120 @@ import plotly.express as px
 import pandas as pd
 
 
-def create_stacked_chart_layout():
-    """Returns the layout section for the stacked chart component.
-    This includes a dropdown to choose which dataset to visualize
-    and a graph to display the stacked chart.
-    """
+def create_stacked_chart_layout(processed_data):
+    invalid = {"year", "country"}
+    attr_options = [
+        c for c in processed_data.columns
+        if c not in invalid
+    ]
 
     return html.Div(
         id="stacked-chart-container",
         children=[
-            html.H2("Oil & Gas Stacked Bar Chart", style={'textAlign':'center'}),
+            html.H2("Stacked Summary for Selected Countries & Time Range", style={"textAlign": "center"}),
 
-            html.Div("Select Dataset:"),
+            html.Label("Stacked attributes:"),
             dcc.Dropdown(
-                id="stacked-chart-dropdown",
-                options=[
-                    {"label": "Oil and Gas Production", "value": "oil_gas_production"},
-                    {"label": "Oil and Gas Emissions", "value": "oil_gas_emissions"},
-                    {"label": "Oil and Gas Consumption", "value": "oil_gas_consumption"},
-
-                ],
-                value="oil_gas_production", # default value
-                clearable=False,
-                style={"width": "300px", "marginBottom": "20px"},
+                id="stacked-attr-selection",
+                options=[{"label": a, "value": a} for a in attr_options],
+                value=["gas production - TWh", "oil production - TWh"], 
+                multi=True,
+                placeholder="Pick one or more attributes...",
+                style={"width": "450px", "marginBottom": "15px"},
             ),
-            dcc.Graph(id="stacked-chart-graph"),
 
-            html.Div(
-                children=[
-                    html.Label("Select Year:"),
-                    dcc.Slider(
-                        id="stacked-chart-year-slider",
-                        min=1965,
-                        max=2023,
-                        value=2023,
-                        marks={str(year): str(year) for year in range(1965, 2023, 5)},
-                        step=1,
-                        tooltip={"placement": "bottom", "always_visible": True},
-                    )
-                ]
-            )
-        ]
-    )
-    
-
-
-# Callback to update the stacked chart based on graph and slider inputs.    
-
-def register_stacked_chart_callbacks(app, processed_data):
-    # We first update the slider range based on the selected dataset
-    @app.callback(
-        Output("stacked-chart-year-slider", "min"),
-        Output("stacked-chart-year-slider", "max"),
-        Output("stacked-chart-year-slider", "value"),
-        Output("stacked-chart-year-slider", "marks"),
-        Input("stacked-chart-dropdown", "value"),
+            dcc.Graph(id="stacked-chart-graph", style={"marginBottom": "80px"}),
+        ],
     )
 
-    def update_stacked_chart_slider(selected_dataset):
-        regions_data = ["North America", "Europe", "Asia", "Africa", "South America", "Oceania"]
 
-        if selected_dataset is None:
-            raise PreventUpdate
-        
-        data_filtered = processed_data[processed_data["country"].isin(regions_data)]
+def register_stacked_chart_callbacks(processed_data):
 
-        # Find min and max years in the filtered data
-        min_year = data_filtered["year"].min()
-        max_year = data_filtered["year"].max()
-        return min_year, max_year, max_year
-    
-    # Now we update the graph when the slider or dropdown changes
-    @app.callback(
+    INVALID = {"year", "country"}
+
+    @callback(
+        Output("stacked-attr-selection", "value"),
         Output("stacked-chart-graph", "figure"),
-        Input("stacked-chart-dropdown", "value"),
-        Input("stacked-chart-year-slider", "value"),
+        Input("dropdown-selection", "value"),
+        Input("year-range-slider", "value"),
+        Input("dropdown-selection-y", "value"),
+        Input("stacked-attr-selection", "value"),
     )
-
-    # Function to update the stacked chart graph based on the selected dataset and selected year
-    def update_stacked_chart_graph(selected_dataset, selected_year):
-        regions_data = ["North America", "Europe", "Asia", "Africa", "South America", "Oceania"]
-        if selected_dataset is None or selected_year is None:
+    def update_stacked_attrs_and_graph(countries, year_range, main_y, selected_attrs):
+        if not countries or not year_range:
             raise PreventUpdate
-        
-        data_filtered = processed_data[
-            (processed_data["country"].isin(regions_data)) &
-            (processed_data["year"] == selected_year)
-        ]
 
-        if data_filtered.empty:
-            return px.bar(title="No data available for the selected year and dataset.")
-        
+        if isinstance(countries, str):
+            countries = [countries]
 
-        if selected_dataset == "oil_gas_production":
-            y_axis = ["oil production - TWh", "gas production - TWh"]
-            title = f"Oil and Gas Production in {selected_year}"
-            y_label = "Production (TWh)"
+        selected_attrs = selected_attrs or []
 
-
-        elif selected_dataset == "oil_gas_emissions":
-            y_axis = ["oil_co2", "gas_co2"]
-            title = f"Oil and Gas CO2 Emissions in {selected_year}"
-            y_label = "CO2 Emissions (MtCO2)"   
+        # Always remove invalids if they got in
+        selected_attrs = [a for a in selected_attrs if a not in INVALID]
 
 
 
-        elif selected_dataset == "oil_gas_consumption":
-             y_axis = ["oil consumption - TWh", "gas consumption - TWh"]
-             title = f"Oil and Gas Consumption in {selected_year}"
-             y_label = "Consumption (TWh)"
+        if not selected_attrs:
+            fig = px.bar(title="Select one or more attributes to build a stacked summary.")
+            fig.update_layout(template="plotly_white")
+            return selected_attrs, fig
 
+        start, end = year_range
 
+        dff = processed_data[
+            (processed_data["country"].isin(countries)) &
+            (processed_data["year"] >= start) &
+            (processed_data["year"] <= end)
+        ].copy()
 
-        # Create the Grouped Bar Chart
-        fig = px.bar(
-            data_filtered,
-            x="country",
-            y=y_axis,
-            title=title,
-            labels={"value": y_label, "country": "Region", "variable": "Energy Source"},
-            barmode="group",
+        if dff.empty:
+            fig = px.bar(title="No data available for selected countries and year range.")
+            fig.update_layout(template="plotly_white")
+            return selected_attrs, fig
+
+        for col in selected_attrs:
+            dff[col] = pd.to_numeric(dff[col], errors="coerce")
+
+        dff = dff.dropna(subset=selected_attrs, how="all")
+        if dff.empty:
+            fig = px.bar(title="No numeric data available for selected attributes in this range.")
+            fig.update_layout(template="plotly_white")
+            return selected_attrs, fig
+
+        agg = (
+            dff.groupby("country")[selected_attrs]
+            .sum()
+            .reset_index()
         )
-        fig.update_layout(xaxis_title="Region", yaxis_title=y_label)
 
-        return fig
-       
-                 
+        long_df = agg.melt(
+            id_vars="country",
+            value_vars=selected_attrs,
+            var_name="attribute",
+            value_name="total",
+        )
 
-    
-        
-    
+        order = (
+            agg.assign(_total=agg[selected_attrs].sum(axis=1))
+               .sort_values("_total", ascending=False)["country"]
+               .tolist()
+        )
 
-  
+        fig = px.bar(
+            long_df,
+            x="country",
+            y="total",
+            color="attribute",
+            barmode="stack",
+            category_orders={"country": order},
+            title=f"Stacked totals ({start}–{end})",
+            labels={"total": "Total over selected range", "attribute": "Attribute"},
+        )
 
-             
-                        
+        fig.update_layout(
+            template="plotly_white",
+            xaxis_title="Country",
+            yaxis_title="Total over period",
+        )
 
-
-
-
-
-
-
-        
+        return selected_attrs, fig

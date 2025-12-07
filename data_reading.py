@@ -42,8 +42,26 @@ def preprocess_data():
         )
 
     final_dataframe = final_dataframe.sort_values(by=["country", "year"])
+    
+    final_dataframe = final_dataframe.rename(columns={
+        'co2': 'co2 - Mt',
+        'gas_co2': 'gas_co2 - Mt',
+        'oil_co2': 'oil_co2 - Mt',
+        'co2_growth_abs': 'co2_growth_abs - Mt',
+        'co2_growth_prct': 'co2_growth_prct - %',
+        'cumulative_oil_co2': 'cumulative_oil_co2 - Mt',
+        'total_ghg': 'total_ghg - Mt'
+    })
+
             
     return final_dataframe
+
+def include_only_countries(data):
+    data_with_codes = pd.read_csv(FilePaths.CO2.value)
+    countries_without_codes = data_with_codes[data_with_codes['iso_code'].isnull()]['country'].unique()
+    
+    no_country_code = data[~data['country'].isin(countries_without_codes)].copy()
+    return no_country_code
 
 def read_data(path, relevant_attributes = []):
     data = pd.read_csv(path)
@@ -102,6 +120,22 @@ def create_oil_gas_production_dataset(data):
     total_oil_gas_production = total_oil_gas_production.sort_values(by='oil production - TWh (total)', ascending=False)
     return total_oil_gas_production
 
+def create_oil_gas_production_dataset2(data):
+    total_oil_gas_production = aggregate_total_oil_gas_production(data)
+    total_oil_gas_production = total_oil_gas_production.sort_values(by='gas production - TWh (total)', ascending=False)
+    return total_oil_gas_production
+
+
+def create_oil_gas_consumption_dataset(data):
+    total_oil_gas_consumption = aggregate_total_oil_gas_consumption(data)
+    total_oil_gas_consumption = total_oil_gas_consumption.sort_values(by='oil consumption - TWh (total)', ascending=False)
+    return total_oil_gas_consumption
+
+def create_oil_gas_consumption_dataset2(data):
+    total_oil_gas_consumption = aggregate_total_oil_gas_consumption(data)
+    total_oil_gas_consumption = total_oil_gas_consumption.sort_values(by='gas consumption - TWh (total)', ascending=False)
+    return total_oil_gas_consumption
+
 def aggregate_total_oil_gas_production(data):
     total_oil_production = (
         data.groupby('country')[['oil production - TWh', 'gas production - TWh']]
@@ -112,6 +146,18 @@ def aggregate_total_oil_gas_production(data):
             })
     )
     return total_oil_production
+
+def aggregate_total_oil_gas_consumption(data):
+    total_oil_consumption = (
+        data.groupby('country')[['oil consumption - TWh', 'gas consumption - TWh']]
+            .sum()
+            .reset_index()
+            .rename(columns={'oil consumption - TWh': 'oil consumption - TWh (total)', 
+                             'gas consumption - TWh': 'gas consumption - TWh (total)'
+            })
+    )
+    return total_oil_consumption
+
 
 def create_oil_production_dataset_countries(total_oil_production, countries):
     total_oil_production_countries = total_oil_production[total_oil_production['country'].isin(countries)]

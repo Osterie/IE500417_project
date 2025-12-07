@@ -1,12 +1,16 @@
 import pandas as pd
 from dash import Dash
+from components.stacked_chart import register_stacked_chart_callbacks
 from components.layout import create_layout
 from components.tabs import create_tabs_layout
 from components.callbacks_graph import register_graph_callbacks
 from components.callbacks_correlation import register_correlation_callbacks
 from components.callbacks_slider import register_slider_callbacks
 from components.prediction.prediction_ui_callbacks import register_prediction_ui_callbacks
+from stories.price.price_data_loader import get_combined_price_data
 from stories.war.war_story_callbacks import register_war_story_callbacks
+from stories.price.price_story_callbacks import register_price_story_callbacks
+from stories.un_goals.un_goals_callbacks import register_un_story_callbacks
 from data_store import processed_data
 
 
@@ -17,11 +21,17 @@ from components.layout import create_layout
 
 app.layout = create_layout()
 
+price_df = get_combined_price_data()
+
+
 register_graph_callbacks(processed_data)
 register_correlation_callbacks(processed_data)
 register_slider_callbacks(processed_data)
 register_prediction_ui_callbacks(processed_data)
+register_stacked_chart_callbacks(processed_data)
 register_war_story_callbacks(processed_data)
+register_price_story_callbacks(price_df)
+register_un_story_callbacks(processed_data)
 
 app.processed_data = processed_data
 
