@@ -36,7 +36,7 @@ def create_price_story_layout(processed_data):
                     create_country_selection(processed_data, 'price-dropdown-selection', default_country='World'),
                     create_x_axis_selection(processed_data, 'price-dropdown-selection-x', default_x='year'),
                     create_y_axis_selection(processed_data, 'price-dropdown-selection-y', default_y='co2 - Mt'),
-                    create_prediction_controls('price-model-selection-container', 'price-enable-prediction', 'price-model-selection', 'price-polynomial-degree')
+                    create_prediction_controls('price-model-selection-container', 'price-enable-prediction', 'price-model-selection', 'price-polynomial-degree', True, "linear")
                 ]
             ),
 

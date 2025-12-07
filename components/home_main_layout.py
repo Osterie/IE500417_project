@@ -128,7 +128,7 @@ def create_rolling_average_selection(show_rolling_average_id, rolling_window_siz
         ], style={"marginTop": "5px"})
     ])
     
-def create_prediction_controls(model_selection_container, enable_prediction_id, model_selection_id, polynomial_degree_id, default_enabled: bool = False,):
+def create_prediction_controls(model_selection_container, enable_prediction_id, model_selection_id, polynomial_degree_id, default_enabled: bool = False, default_prediction = "polynomial"):
     return html.Div(id='prediction-container', children=[
         dcc.Checklist(
             id=enable_prediction_id,
@@ -145,12 +145,13 @@ def create_prediction_controls(model_selection_container, enable_prediction_id, 
                 dcc.Dropdown(
                     options=[
                         {"label": "Polynomial Regression", "value": "polynomial"},
+                        {"label": "Linear", "value": "linear"},
                         {"label": "Exponential", "value": "exponential"},
                         {"label": "Logarithmic", "value": "logarithmic"},
                         {"label": "Random Forest", "value": "random_forest"},
                         {"label": "LOWESS Smoother", "value": "lowess"},
                     ],
-                    value=["polynomial"],
+                    value=[default_prediction],
                     multi=True,
                     id=model_selection_id
                 ),

@@ -75,6 +75,7 @@ def add_prediction(
     base_styles = {
         "polynomial":    dict(dash="dot",      width=2),
         "exponential":   dict(dash="dash",     width=2),
+        "linear":        dict(dash="dot",      width=2),
         "logarithmic":   dict(dash="dashdot",  width=2),
         "random_forest": dict(dash="longdash", width=2),
         "lowess":        dict(dash="solid",    width=2),
@@ -132,6 +133,10 @@ def add_prediction(
 
             y_pred = _fit_polynomial(x, y, x_pred, degree)
             line_label = f"{c} Polynomial (deg={degree})"
+            
+        elif model_type == "linear":
+            y_pred = _fit_polynomial(x, y, x_pred, degree=1)
+            line_label = f"{c} Linear"
 
         elif model_type == "exponential":
             # y = a * exp(bx)
