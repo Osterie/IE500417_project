@@ -34,11 +34,6 @@ def _get_country_color(fig, country_name):
 
 
 def _build_x_pred(df_c, x_attr, year_range=None, n_points=100):
-    """
-    Build prediction x-grid.
-    - If x_attr == 'year' and year_range provided: use integer yearly grid.
-    - Otherwise: linear space across observed range of x_attr in df_c.
-    """
     x_vals = df_c[x_attr].dropna().values
     if len(x_vals) == 0:
         return None

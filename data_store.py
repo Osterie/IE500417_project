@@ -90,7 +90,7 @@ countries_in_europe = [
 "Poland",
 "Portugal",
 "Romania",
-"Russia", #Include russia?
+"Russia", 
 "San Marino",
 "Serbia",
 "Slovakia",

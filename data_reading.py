@@ -164,46 +164,7 @@ def create_oil_production_dataset_countries(total_oil_production, countries):
     total_oil_production_countries = total_oil_production_countries.sort_values(by='oil production - TWh (total)', ascending=False)
     return total_oil_production_countries
 
-# Attribtues we care about:
-# year
-# country / country
-# oil production - Twh
-# gas production - Twh
-# oil consumption - Twh
-# gas consumption - Twh
-# co2
-# gas_co2
-# oil_co2
-# population
-# gdp
-# co2_growth_abs - rename to co2 growth absolute?
-# co2_growth_prct - rename to co2 growth percent?
-# co2_per_unit_energy
-# total_ghg
-# cumulative_oil_co2
-# methane
 
-# maybe
-# gas_co2_per_capita
-# oil_co2_per_capita
-# cumulative_co2
-# cumulative_gas_co2
-# flaring_co2
-# cumulative_flaring_co2
-# energy_per_capita
-# energy_per_gdp
-# share_global_co2
-# share_global_cumulative_co2
-# share_global_cumulative_flaring_co2
-# share_global_cumulative_gas_co2
-# share_global_cumulative_oil_co2
-# share_global_flaring_co2
-# share_global_gas_co2
-# share_global_oil_co2
-# share_of_temperature_change_from_ghg
-# temperature_change_from_ch4
-# temperature_change_from_co2
-# temperature_change_from_ghg
 def get_attributes_we_care_about():
     return [
     "year",
