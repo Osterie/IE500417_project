@@ -90,19 +90,19 @@ def register_price_story_callbacks(processed_data):
         story_mode_description = ""
         if selected_story_mode == "Oil dependent countries":
             story_mode_explanation = "You are viewing a story about some countries with high Oil consumption in Europe"
-            story_mode_description = "We can see a sligth downwards trend for oil consumption for some oil dependent countries when the price of oil increases. This does intuitively make sense, although there are also many other factors affecting oil consumption."
+            story_mode_description = "We can see a slight downwards trend for oil consumption for some oil dependent countries when the price of oil increases. This does intuitively make sense, although there are also many other factors affecting oil consumption."
         
         elif selected_story_mode == "Gas dependent countries":
             story_mode_explanation = "You are viewing a story about some countries with high Gas consumption in Europe"
-            story_mode_description = "We excpected that when gass prices rose, the consumtion would also rise. This was not the case for every country, this could be because of external unknown causes. "
+            story_mode_description = "We excpected that when gas prices rise, the consumption would also rise. This was not the case for every country, this could be because of external unknown causes."
         
         elif selected_story_mode == "Oil producing countries":
             story_mode_explanation = "You are viewing a story about some countries with high Oil production in Europe"
-            story_mode_description = "We can see that for the selected countries, oil production generaly rizes when oil prices raise. This can be because of when this or other countries need more oil, they are willing to pay more for it, also known as suply and demand."
+            story_mode_description = "We can see that for the selected countries, oil production generally rises when oil prices rise. This can be because of when these or other countries need more oil, they are willing to pay more for it, also known as supply and demand."
         
         elif selected_story_mode == "Gas producing countries":
             story_mode_explanation = "You are viewing a story about some countries with high Oil consumption in Europe"
-            story_mode_description = "We can see that for the selected countries, gass production generaly rizes or stays still when prices raises. This can be becuase of suply and demand, and for the countries that the price does not change, they might produce a set amount of gass per year."
+            story_mode_description = "We can see that for the selected countries, gas production generally rises or stays still when prices rise. This can be becuase of supply and demand, and for the countries that the price does not change, they might produce a set amount of gas per year."
 
         return story_mode_explanation, story_mode_description
         
